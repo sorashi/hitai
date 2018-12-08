@@ -43,7 +43,7 @@ namespace Hitai.AsymmetricEncryption
             ArmorType armorType = armorProvider.GetArmorType(contents);
             if (armorType != ArmorType.PublicKey && armorType != ArmorType.PrivateKey)
                 throw new InvalidOperationException(
-                    "Armor neni spravneho typu (neobsahuje ani verejny, ani soukromy klic)");
+                    "Armor není správného typu (neobsahuje ani veřejný, ani soukromý klíč)");
             byte[] rawData = armorProvider.FromArmor(contents).rawData;
             var keyPair = LZ4MessagePackSerializer.Deserialize<KeyPair>(rawData);
             return keyPair;
@@ -63,6 +63,7 @@ namespace Hitai.AsymmetricEncryption
         ///     Encrypts and saves the <see cref="PrivateExponent" />
         /// </summary>
         /// <param name="data"></param>
+        /// <param name="password"></param>
         /// <returns></returns>
         public async Task SetPrivateExponentAsync(byte[] data, string password) {
             var aes = new AesSymmetricEncryptionProvider();
@@ -72,7 +73,7 @@ namespace Hitai.AsymmetricEncryption
                 sha.ComputeHash(Encoding.UTF8.GetBytes(password).Concat(aes.Salt).ToArray());
             PasswordHash = hash;
             Salt = aes.Salt;
-            IV = aes.IV;
+            Iv = aes.Iv;
             PrivateExponent = await aes.TransformAsync(data);
         }
 
@@ -83,7 +84,7 @@ namespace Hitai.AsymmetricEncryption
             if (!CheckPassword(password))
                 throw new CryptographicException("Invalid password");
             aes.GenerateKeyFromPassword(password, Salt);
-            aes.IV = IV;
+            aes.Iv = Iv;
             return await aes.TransformAsync(PrivateExponent, false);
         }
 
@@ -94,8 +95,8 @@ namespace Hitai.AsymmetricEncryption
         }
 
         public override bool Equals(object obj) {
-            if (obj as KeyPair != null)
-                return Equals(obj as KeyPair);
+            if (obj is KeyPair keyPair)
+                return Equals(keyPair);
             return base.Equals(obj);
         }
 
@@ -136,7 +137,11 @@ namespace Hitai.AsymmetricEncryption
 
         [Key(5)] public byte[] Salt { get; set; }
 
-        [Key(6)] public byte[] IV { get; set; }
+        /// <summary>
+        ///     Initialization vector
+        /// </summary>
+        [Key(6)]
+        public byte[] Iv { get; set; }
 
         [Key(7)] public DateTime CreationTime { get; set; }
 

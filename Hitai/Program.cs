@@ -29,6 +29,7 @@ namespace Hitai
         }
 
         private static void ShowExceptionDialog(Exception ex) {
+            if (ex == null) throw new ArgumentNullException(nameof(ex));
             while (ex is AggregateException) ex = ex.InnerException;
             // todo vlastní dialog
             MessageBox.Show(

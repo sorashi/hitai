@@ -16,7 +16,11 @@ namespace Hitai.Models
 
         [Key("key")] public byte[] EncryptedKey { get; set; }
 
-        [Key("iv")] public byte[] IV { get; set; }
+        /// <summary>
+        ///     Initialization vector
+        /// </summary>
+        [Key("iv")]
+        public byte[] Iv { get; set; }
 
         /// <summary>
         ///     Aes encrypted content of the message

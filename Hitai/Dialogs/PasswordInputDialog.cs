@@ -7,9 +7,7 @@ namespace Hitai.Dialogs
     {
         public PasswordInputDialog(string reason = null) {
             InitializeComponent();
-            if (string.IsNullOrEmpty(reason))
-                Reason = "neznámý";
-            else Reason = reason;
+            Reason = string.IsNullOrEmpty(reason) ? "neznámý" : reason;
         }
 
         public string Password { get; set; }

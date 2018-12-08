@@ -9,20 +9,17 @@ namespace Hitai.Test.IO
     public class BitStreamTests
     {
 #pragma warning disable CS0612 // Type or member is obsolete
-        private BitStream dummyBitStream;
+        private BitStream _dummyBitStream;
 
         [SetUp]
         public void Setup() {
-            dummyBitStream = new BitStream(1);
+            _dummyBitStream = new BitStream(1);
         }
 
         [Test]
         public void ReadTest() {
-            BitStream bs;
-            Assert.Throws<ArgumentNullException>(() => {
-                bs = new BitStream(new byte[] {1});
-                bs.Read(null, 0, 1);
-            });
+            var bs = new BitStream(new byte[] {1});
+            Assert.Throws<ArgumentNullException>(() => { bs.Read(null, 0, 1); });
             var testSource = new byte[] {
                 0b0000_0001,
                 0b1010_1010,
@@ -38,11 +35,8 @@ namespace Hitai.Test.IO
 
         [Test]
         public void WriteTest() {
-            BitStream bs;
-            Assert.Throws<ArgumentNullException>(() => {
-                bs = new BitStream(new byte[] {1});
-                bs.Write(null, 0, 1);
-            });
+            var bs = new BitStream(new byte[] {1});
+            Assert.Throws<ArgumentNullException>(() => { bs.Write(null, 0, 1); });
             bs = new BitStream(10);
             Assert.AreEqual(10, bs.Length);
             bs.Write(new byte[] {0}, 0, 1);
@@ -60,15 +54,15 @@ namespace Hitai.Test.IO
 
         [Test]
         public void CanReadWriteSeekTest() {
-            Assert.IsTrue(dummyBitStream.CanRead);
-            Assert.IsTrue(dummyBitStream.CanWrite);
-            Assert.IsTrue(dummyBitStream.CanSeek);
+            Assert.IsTrue(_dummyBitStream.CanRead);
+            Assert.IsTrue(_dummyBitStream.CanWrite);
+            Assert.IsTrue(_dummyBitStream.CanSeek);
         }
 
         [Test]
         public void NotSupportedTest() {
-            Assert.Throws<NotSupportedException>(() => dummyBitStream.Flush());
-            Assert.Throws<NotSupportedException>(() => dummyBitStream.SetLength(1));
+            Assert.Throws<NotSupportedException>(() => _dummyBitStream.Flush());
+            Assert.Throws<NotSupportedException>(() => _dummyBitStream.SetLength(1));
         }
 
         [Test]

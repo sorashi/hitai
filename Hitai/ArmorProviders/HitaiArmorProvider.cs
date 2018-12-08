@@ -18,10 +18,10 @@ namespace Hitai.ArmorProviders
                 ("PRIVATE KEY", ArmorType.PrivateKey)
             };
 
-        private readonly Encoding encoding = Encoding.ASCII;
+        private readonly Encoding _encoding = Encoding.ASCII;
 
         public (byte[] rawData, ArmorType armorType) FromArmor(byte[] armor) {
-            string armorString = encoding.GetString(armor).Trim();
+            string armorString = _encoding.GetString(armor).Trim();
             ArmorType armorType = GetArmorType(armor);
             string[] parts = armorString.Split('.');
             if (parts.Length > 3) throw new FormatException("Armor is in a wrong format");
@@ -32,7 +32,7 @@ namespace Hitai.ArmorProviders
         }
 
         public ArmorType GetArmorType(byte[] armor) {
-            string armorString = encoding.GetString(armor);
+            string armorString = _encoding.GetString(armor);
             string typeIdentifier = armorString.Split('.').First().Trim();
             (string identifer, ArmorType type) armorType =
                 _armorTypeIdentifiers.FirstOrDefault(x =>
@@ -46,7 +46,7 @@ namespace Hitai.ArmorProviders
             var converter = new Base62Converter();
             string base62 = converter.ToBase62String(rawData);
             (string identifer, ArmorType type) identifierPair =
-                _armorTypeIdentifiers.Where(x => x.type == armorType).FirstOrDefault();
+                _armorTypeIdentifiers.FirstOrDefault(x => x.type == armorType);
             if (identifierPair.Equals(default)) throw new Exception();
             string identifier = identifierPair.identifer;
             var sb = new StringBuilder();
@@ -58,7 +58,7 @@ namespace Hitai.ArmorProviders
             }
 
             sb.Append($". END HITAI {identifier}");
-            return encoding.GetBytes(sb.ToString());
+            return _encoding.GetBytes(sb.ToString());
         }
     }
 }

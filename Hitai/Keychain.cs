@@ -15,25 +15,24 @@ namespace Hitai
         /// <summary>
         ///     Mutex pro datovou složku Keys
         /// </summary>
-        private static readonly SemaphoreSlim keysSemaphore = new SemaphoreSlim(1, 1);
+        private static readonly SemaphoreSlim KeysSemaphore = new SemaphoreSlim(1, 1);
 
-        private static Keychain Instance;
+        private static Keychain _instance;
         public List<KeyPair> Keys = new List<KeyPair>();
 
         private Keychain() {
         }
 
         public static async Task<Keychain> GetInstance() {
-            return Instance ?? (Instance = await LoadAsync());
+            return _instance ?? (_instance = await LoadAsync());
         }
 
         private static async Task<Keychain> LoadAsync() {
-            Settings settings = await Settings.LoadAsync();
             return await LoadAsync(Settings.KeychainFolder);
         }
 
         private static async Task<Keychain> LoadAsync(string folder) {
-            await keysSemaphore.WaitAsync();
+            await KeysSemaphore.WaitAsync();
             try {
                 var keychain = new Keychain();
                 if (!Directory.Exists(folder)) return keychain;
@@ -42,7 +41,7 @@ namespace Hitai
                 return keychain;
             }
             finally {
-                keysSemaphore.Release();
+                KeysSemaphore.Release();
             }
         }
 
@@ -52,7 +51,7 @@ namespace Hitai
         /// <param name="key"></param>
         /// <returns></returns>
         public async Task<int> AddKeyPair(KeyPair key) {
-            await keysSemaphore.WaitAsync();
+            await KeysSemaphore.WaitAsync();
             try {
                 Keys.Add(key);
                 OnKeypairAdded?.Invoke(key);
@@ -63,7 +62,7 @@ namespace Hitai
                 return Keys.Count;
             }
             finally {
-                keysSemaphore.Release();
+                KeysSemaphore.Release();
             }
         }
 
@@ -73,14 +72,14 @@ namespace Hitai
         /// <param name="index"></param>
         /// <returns></returns>
         public async Task<KeyPair> RemoveKeyPair(int index) {
-            await keysSemaphore.WaitAsync();
+            await KeysSemaphore.WaitAsync();
             try {
                 KeyPair removed = Keys[index];
                 await RemoveKeyPair(removed);
                 return removed;
             }
             finally {
-                keysSemaphore.Release();
+                KeysSemaphore.Release();
             }
         }
 
@@ -96,12 +95,12 @@ namespace Hitai
         }
 
         private async Task LockOperation(Func<Task> operation) {
-            await keysSemaphore.WaitAsync();
+            await KeysSemaphore.WaitAsync();
             try {
                 await operation();
             }
             finally {
-                keysSemaphore.Release();
+                KeysSemaphore.Release();
             }
         }
 

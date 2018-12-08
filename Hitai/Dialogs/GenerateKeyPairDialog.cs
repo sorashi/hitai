@@ -8,7 +8,7 @@ namespace Hitai.Dialogs
 {
     public partial class GenerateKeyPairDialog : Form
     {
-        private IAsymmetricEncryptionProvider aep;
+        private IAsymmetricEncryptionProvider _aep;
 
         public GenerateKeyPairDialog() {
             InitializeComponent();
@@ -49,12 +49,12 @@ namespace Hitai.Dialogs
             await Task.Factory.StartNew(() => {
                 switch (selectedItem) {
                     case 0: // .NET RSA
-                        aep = new SystemAsymmetricEncryptionProvider();
+                        _aep = new SystemAsymmetricEncryptionProvider();
                         break;
                     case 1: // Hitai RSA
                         var hiaep = new HitaiAsymmetricEncryptionProvider();
                         hiaep.GenerateNewKeypair();
-                        aep = hiaep;
+                        _aep = hiaep;
                         break;
                     default:
                         throw new NotImplementedException();
@@ -65,12 +65,12 @@ namespace Hitai.Dialogs
             var passwordCreationDialog = new CreatePasswordDialog();
             if (passwordCreationDialog.ShowDialog() != DialogResult.OK)
                 return;
-            Keypair = aep.GetPrivateKey(passwordCreationDialog.Password);
+            Keypair = _aep.GetPrivateKey(passwordCreationDialog.Password);
             Keypair.CreationTime = DateTime.Now;
             Keypair.Expires = dateTimePicker.Value;
             Keypair.UserId = $"{textBox_name.Text} <{textBox_email.Text}>";
             Keypair.RsaProvider =
-                Array.IndexOf(AsymmetricEncryptionController.ProviderList, aep.GetType());
+                Array.IndexOf(AsymmetricEncryptionController.ProviderList, _aep.GetType());
             textBox_id.Text = Keypair.ShortId;
             butSave.Enabled = true;
         }

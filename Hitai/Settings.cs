@@ -27,13 +27,10 @@ namespace Hitai
         /// <returns></returns>
         public static async Task<Settings> LoadAsync(bool loadNew = true) {
             if (!SaveExists()) {
-                if (loadNew) {
-                    var settings = new Settings();
-                    await settings.SaveAsync();
-                    return settings;
-                }
-
-                throw new FileNotFoundException("Settings file not found");
+                if (!loadNew) throw new FileNotFoundException("Settings file not found");
+                var settings = new Settings();
+                await settings.SaveAsync();
+                return settings;
             }
 
             using (var sr = new StreamReader(SavePath)) {

@@ -28,9 +28,9 @@ namespace Hitai.IO
                     if (count >= base62.Length - 1) {
                         var mod = (int)(stream.Position % 8);
                         if (mod == 0)
-                            throw new InvalidDataException("Byl nalezen znak navic");
+                            throw new InvalidDataException("Byl nalezen znak navíc");
                         if ((index >> (8 - mod)) > 0)
-                            throw new InvalidDataException("Spatny znak na konci retezce");
+                            throw new InvalidDataException("Špatný znak na konci řetězce");
                         stream.Write(new byte[] { (byte)(index << mod) }, 0, 8 - mod);
                     }
                     else {

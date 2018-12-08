@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Text;
 using System.Windows.Forms;
 using Hitai.ArmorProviders;
@@ -25,6 +26,7 @@ namespace Hitai.Dialogs
             byte[] bytes = Encoding.UTF8.GetBytes(textBox.Text);
             Type armorType = ArmorRecognizer.RecognizeArmor(bytes);
             var armor = Activator.CreateInstance(armorType) as IArmorProvider;
+            Debug.Assert(armor != null, nameof(armor) + " != null");
             (byte[] rawData, ArmorType armorDataType) = armor.FromArmor(bytes);
             if (armorDataType != ArmorType.PublicKey) {
                 MessageBox.Show("Vložený text není veřejný klíč.");

@@ -8,10 +8,10 @@ namespace Hitai
 {
     public partial class UserControlKeychain : UserControl
     {
-        private Keychain _keychain;
-
         private readonly Dictionary<KeyPair, ListViewItem> _keyPairToListViewItemMap =
             new Dictionary<KeyPair, ListViewItem>();
+
+        private Keychain _keychain;
 
         public UserControlKeychain() {
             InitializeComponent();
@@ -22,11 +22,11 @@ namespace Hitai
                 IEnumerable<KeyPair> keypairs = listView.SelectedItems
                     .Cast<ListViewItem>()
                     .Select(item => _keyPairToListViewItemMap.Keys
-                        .Where(x => _keyPairToListViewItemMap[x] == item)
-                        .FirstOrDefault());
-                if (keypairs.Any(x => x == null))
-                    throw new Exception("Could not find listitem-respective keypair");
-                return keypairs.ToArray();
+                        .FirstOrDefault(x => _keyPairToListViewItemMap[x] == item));
+                KeyPair[] enumeration = keypairs as KeyPair[] ?? keypairs.ToArray();
+                if (enumeration.Any(x => x == null))
+                    throw new Exception("Could not find ListItem-respective keypair");
+                return enumeration;
             }
         }
 

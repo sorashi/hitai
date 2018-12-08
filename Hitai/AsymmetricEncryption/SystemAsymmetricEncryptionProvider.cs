@@ -7,15 +7,15 @@ namespace Hitai.AsymmetricEncryption
 {
     public class SystemAsymmetricEncryptionProvider : IAsymmetricEncryptionProvider
     {
-        private RSACryptoServiceProvider Rsa = new RSACryptoServiceProvider();
-        public bool PublicOnly => Rsa.PublicOnly;
+        private RSACryptoServiceProvider _rsa = new RSACryptoServiceProvider();
+        public bool PublicOnly => _rsa.PublicOnly;
 
         public byte[] Encrypt(byte[] data) {
-            return Rsa.Encrypt(data, true);
+            return _rsa.Encrypt(data, true);
         }
 
         public byte[] Decrypt(byte[] data) {
-            return Rsa.Decrypt(data, true);
+            return _rsa.Decrypt(data, true);
         }
 
         /// <summary>
@@ -24,7 +24,7 @@ namespace Hitai.AsymmetricEncryption
         /// <param name="data"></param>
         /// <returns></returns>
         public byte[] SignData(byte[] data) {
-            return Rsa.SignData(data, SHA256.Create());
+            return _rsa.SignData(data, SHA256.Create());
         }
 
         /// <summary>
@@ -34,23 +34,23 @@ namespace Hitai.AsymmetricEncryption
         /// <param name="data"></param>
         /// <returns></returns>
         public bool VerifyData(byte[] data, byte[] signature) {
-            return Rsa.VerifyData(data, SHA256.Create(), signature);
+            return _rsa.VerifyData(data, SHA256.Create(), signature);
         }
 
         public KeyPair GetPrivateKey(string password) {
-            if (Rsa.PublicOnly)
+            if (_rsa.PublicOnly)
                 throw new InvalidOperationException("The keypair contains only public information");
-            return RsaParametersToKeyPairAsync(Rsa.ExportParameters(true), password).Result;
+            return RsaParametersToKeyPairAsync(_rsa.ExportParameters(true), password).Result;
         }
 
         public KeyPair GetPublicKey() {
-            return RsaParametersToKeyPairAsync(Rsa.ExportParameters(false)).Result;
+            return RsaParametersToKeyPairAsync(_rsa.ExportParameters(false)).Result;
         }
 
         public void SetKeyPair(KeyPair kp, string password = null) {
             if (kp.IsPrivate && password == null)
                 throw new ArgumentException("Missing password");
-            Rsa.ImportParameters(new RSAParameters {
+            _rsa.ImportParameters(new RSAParameters {
                 D = password == null ? null : kp.GetPrivateExponentAsync(password).Result,
                 Exponent = kp.Exponent.ToByteArray(),
                 Modulus = kp.Modulus.ToByteArray()
@@ -58,9 +58,9 @@ namespace Hitai.AsymmetricEncryption
         }
 
         public void EnsurePositiveModulus() {
-            while (new BigInteger(Rsa.ExportParameters(true).Modulus).Sign != 1 ||
-                   new BigInteger(Rsa.ExportParameters(true).D).Sign != 1)
-                Rsa = new RSACryptoServiceProvider();
+            while (new BigInteger(_rsa.ExportParameters(true).Modulus).Sign != 1 ||
+                   new BigInteger(_rsa.ExportParameters(true).D).Sign != 1)
+                _rsa = new RSACryptoServiceProvider();
         }
 
         /// <summary>
@@ -69,7 +69,7 @@ namespace Hitai.AsymmetricEncryption
         /// <param name="hash"></param>
         /// <returns></returns>
         public byte[] SignHash(byte[] hash) {
-            return Rsa.SignHash(hash, CryptoConfig.MapNameToOID("SHA256"));
+            return _rsa.SignHash(hash, CryptoConfig.MapNameToOID("SHA256"));
         }
 
         /// <summary>
@@ -79,14 +79,15 @@ namespace Hitai.AsymmetricEncryption
         /// <param name="signature"></param>
         /// <returns></returns>
         public bool VerifyHash(byte[] hash, byte[] signature) {
-            return Rsa.VerifyHash(hash, CryptoConfig.MapNameToOID("SHA256"), signature);
+            return _rsa.VerifyHash(hash, CryptoConfig.MapNameToOID("SHA256"), signature);
         }
 
         private async Task<KeyPair> RsaParametersToKeyPairAsync(RSAParameters parameters,
             string password = null) {
-            var kp = new KeyPair();
-            kp.Modulus = new BigInteger(parameters.Modulus);
-            kp.Exponent = new BigInteger(parameters.Exponent);
+            var kp = new KeyPair {
+                Modulus = new BigInteger(parameters.Modulus),
+                Exponent = new BigInteger(parameters.Exponent)
+            };
             if (parameters.D != null && password == null)
                 throw new ArgumentException("Missing password");
             if (parameters.D != null)

@@ -27,25 +27,21 @@ namespace Hitai.AsymmetricEncryption
         }
 
         public KeyPair GetPrivateKey(string password) {
-            var kp = new KeyPair();
-            kp.Exponent = Exponent;
-            kp.Modulus = Modulus;
+            var kp = new KeyPair {Exponent = Exponent, Modulus = Modulus};
             if (PrivateExponent == null) throw new InvalidOperationException();
             kp.SetPrivateExponentAsync(PrivateExponent.Value.ToByteArray(), password).Wait();
             return kp;
         }
 
         public KeyPair GetPublicKey() {
-            var kp = new KeyPair();
-            kp.Exponent = Exponent;
-            kp.Modulus = Modulus;
+            var kp = new KeyPair {Exponent = Exponent, Modulus = Modulus};
             return kp;
         }
 
         public void SetKeyPair(KeyPair kp, string password = null) {
             Exponent = kp.Exponent;
             Modulus = kp.Modulus;
-            if (kp.IsPrivate && password == null) throw new ArgumentException("Je potreba heslo");
+            if (kp.IsPrivate && password == null) throw new ArgumentException("Je potřeba heslo");
             if (kp.IsPrivate)
                 PrivateExponent = new BigInteger(kp.GetPrivateExponentAsync(password).Result);
         }

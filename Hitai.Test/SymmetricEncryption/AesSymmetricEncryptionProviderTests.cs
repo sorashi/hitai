@@ -10,52 +10,52 @@ namespace Hitai.SymmetricEncryption.Tests
     {
         [SetUp]
         public void Setup() {
-            aes = new AesSymmetricEncryptionProvider();
+            _aes = new AesSymmetricEncryptionProvider();
         }
 
-        private AesSymmetricEncryptionProvider aes;
+        private AesSymmetricEncryptionProvider _aes;
 
         [Test]
         public void GenerateKeyPasswordBasedTest() {
-            byte[] oldKey = aes.Key;
-            aes.GenerateKeyFromPassword("this_is_some_password");
-            CollectionAssert.AreNotEqual(oldKey, aes.Key);
-            oldKey = aes.Key;
-            byte[] salt = aes.Salt;
-            aes.GenerateKeyFromPassword("this_is_some_password", salt);
-            CollectionAssert.AreEqual(oldKey, aes.Key);
-            CollectionAssert.AreEqual(salt, aes.Salt);
+            byte[] oldKey = _aes.Key;
+            _aes.GenerateKeyFromPassword("this_is_some_password");
+            CollectionAssert.AreNotEqual(oldKey, _aes.Key);
+            oldKey = _aes.Key;
+            byte[] salt = _aes.Salt;
+            _aes.GenerateKeyFromPassword("this_is_some_password", salt);
+            CollectionAssert.AreEqual(oldKey, _aes.Key);
+            CollectionAssert.AreEqual(salt, _aes.Salt);
         }
 
         [Test]
         public void GenerateKeyTest() {
-            byte[] oldKey = aes.Key;
-            aes.GenerateKey();
-            CollectionAssert.AreNotEqual(oldKey, aes.Key);
+            byte[] oldKey = _aes.Key;
+            _aes.GenerateKey();
+            CollectionAssert.AreNotEqual(oldKey, _aes.Key);
         }
 
         [Test]
-        public void NewIVTest() {
-            byte[] oldIv = aes.IV;
-            aes.NewIV();
-            CollectionAssert.AreNotEqual(oldIv, aes.IV);
+        public void NewIvTest() {
+            byte[] oldIv = _aes.Iv;
+            _aes.NewIv();
+            CollectionAssert.AreNotEqual(oldIv, _aes.Iv);
         }
 
         [Test]
         public async Task TransformAsyncTest() {
             var cleartext = "Lorem Ipsum Dolor Sit Amet 2018 Consequer";
             var password = "this is the password";
-            aes.GenerateKeyFromPassword(password);
-            var salt = new byte[aes.Salt.Length];
-            var iv = new byte[aes.IV.Length];
-            Array.Copy(aes.Salt, salt, salt.Length);
-            Array.Copy(aes.IV, iv, iv.Length);
-            byte[] cipher = await aes.TransformAsync(Encoding.ASCII.GetBytes(cleartext));
+            _aes.GenerateKeyFromPassword(password);
+            var salt = new byte[_aes.Salt.Length];
+            var iv = new byte[_aes.Iv.Length];
+            Array.Copy(_aes.Salt, salt, salt.Length);
+            Array.Copy(_aes.Iv, iv, iv.Length);
+            byte[] cipher = await _aes.TransformAsync(Encoding.ASCII.GetBytes(cleartext));
             Console.WriteLine(Convert.ToBase64String(cipher));
-            aes = new AesSymmetricEncryptionProvider();
-            aes.GenerateKeyFromPassword(password, salt);
-            aes.IV = iv;
-            string result = Encoding.ASCII.GetString(await aes.TransformAsync(cipher, false));
+            _aes = new AesSymmetricEncryptionProvider();
+            _aes.GenerateKeyFromPassword(password, salt);
+            _aes.Iv = iv;
+            string result = Encoding.ASCII.GetString(await _aes.TransformAsync(cipher, false));
             Assert.AreEqual(cleartext, result);
         }
     }

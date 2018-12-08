@@ -34,7 +34,7 @@ namespace Hitai.AsymmetricEncryption
             var m = new Message {
                 Content = cipher,
                 EncryptedKey = encryptedKey,
-                IV = aes.IV,
+                Iv = aes.Iv,
                 RecipientId = recipient.ShortId
             };
             return m;
@@ -53,9 +53,7 @@ namespace Hitai.AsymmetricEncryption
             IAsymmetricEncryptionProvider provider = GetRsaProvider(kp.RsaProvider);
             provider.SetKeyPair(kp, password);
             byte[] key = provider.Decrypt(m.EncryptedKey);
-            var aes = new AesSymmetricEncryptionProvider();
-            aes.Key = key;
-            aes.IV = m.IV;
+            var aes = new AesSymmetricEncryptionProvider {Key = key, Iv = m.Iv};
             return aes.TransformAsync(m.Content, false).Result;
         }
 
@@ -68,8 +66,7 @@ namespace Hitai.AsymmetricEncryption
         public static Signature Sign(byte[] data, string password, KeyPair kp) {
             IAsymmetricEncryptionProvider provider = GetRsaProvider(kp.RsaProvider);
             provider.SetKeyPair(kp, password);
-            var signature = new Signature();
-            signature.Data = new byte[data.Length];
+            var signature = new Signature {Data = new byte[data.Length]};
             Array.Copy(data, signature.Data, data.Length);
             // todo include salt
             signature.SignatureData = provider.SignData(signature.Data);

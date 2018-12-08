@@ -10,7 +10,7 @@ namespace Hitai.Math
 {
     public static class PrimeGenerator
     {
-        public static RNGCryptoServiceProvider random = new RNGCryptoServiceProvider();
+        private static readonly RNGCryptoServiceProvider Random = new RNGCryptoServiceProvider();
 
         /// <summary>
         ///     First 400 primes
@@ -98,7 +98,7 @@ namespace Hitai.Math
         }
 
         /// <summary>
-        ///     Runs <see cref="GetProbablePrime(int)" /> in multiple threads and returns the first two results aquired
+        ///     Runs <see cref="GetProbablePrime(int)" /> in multiple threads and returns the first two results acquired
         /// </summary>
         /// <param name="bits"></param>
         /// <param name="n">
@@ -183,14 +183,12 @@ namespace Hitai.Math
         /// <returns></returns>
         public static BigInteger RandomOddBigInteger(int bits) {
             var buffer = new byte[bits / 8];
-            BigInteger result;
-            random.GetNonZeroBytes(buffer);
+            Random.GetNonZeroBytes(buffer);
             // zajistíme, aby byl výsledek nezáporný
             buffer[buffer.Length - 1] &= 0b0111_1111;
             // zajistíme, aby byl výsledek lichý
             buffer[0] |= 1;
-            result = new BigInteger(buffer);
-            return result;
+            return new BigInteger(buffer);
         }
 
         public static BigInteger RandomBigInteger(BigInteger from, BigInteger to) {
@@ -199,7 +197,7 @@ namespace Hitai.Math
             byte[] buffer = to.ToByteArray();
             BigInteger result;
             do {
-                random.GetBytes(buffer);
+                Random.GetBytes(buffer);
                 // zajistíme aby byl výsledek nezáporný
                 buffer[buffer.Length - 1] &= 0b0111_1111;
                 result = new BigInteger(buffer);
