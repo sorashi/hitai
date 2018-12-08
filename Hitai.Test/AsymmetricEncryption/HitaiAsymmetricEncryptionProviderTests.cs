@@ -1,20 +1,15 @@
-﻿using NUnit.Framework;
-using Hitai.AsymmetricEncryption;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System;
 using System.Numerics;
-using System.Text;
-using System.Threading.Tasks;
+using NUnit.Framework;
 
 namespace Hitai.AsymmetricEncryption.Tests
 {
-    [TestFixture()]
+    [TestFixture]
     public class HitaiAsymmetricEncryptionProviderTests
     {
-        Random random = new Random();
-        HitaiAsymmetricEncryptionProvider rsa;
-        HitaiAsymmetricEncryptionProvider rsaPublic;
+        private readonly Random random = new Random();
+        private HitaiAsymmetricEncryptionProvider rsa;
+        private HitaiAsymmetricEncryptionProvider rsaPublic;
         private readonly BigInteger E = 3;
 
         private BigInteger D =
@@ -28,7 +23,7 @@ namespace Hitai.AsymmetricEncryption.Tests
         public void Setup() {
             rsa = new HitaiAsymmetricEncryptionProvider();
             rsaPublic = new HitaiAsymmetricEncryptionProvider();
-            var kp = new KeyPair() {
+            var kp = new KeyPair {
                 Exponent = E,
                 Modulus = N
             };
@@ -37,13 +32,13 @@ namespace Hitai.AsymmetricEncryption.Tests
             rsaPublic.SetKeyPair(kp.ToPublic());
         }
 
-        [Test()]
+        [Test]
         public void EncryptDecryptTest() {
             var data = new byte[64];
             random.NextBytes(data);
-            var result = rsaPublic.Encrypt(data);
+            byte[] result = rsaPublic.Encrypt(data);
             CollectionAssert.AreNotEqual(data, result);
-            var back = rsa.Decrypt(result);
+            byte[] back = rsa.Decrypt(result);
             CollectionAssert.AreEqual(data, back);
             Assert.Throws<InvalidOperationException>(() => rsaPublic.Decrypt(result));
         }

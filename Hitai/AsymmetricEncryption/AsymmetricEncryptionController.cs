@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
-using System.Threading.Tasks;
 using Hitai.Models;
 using Hitai.SymmetricEncryption;
 using MessagePack;
@@ -11,7 +7,9 @@ using MessagePack;
 namespace Hitai.AsymmetricEncryption
 {
     /// <summary>
-    /// Provides shortcut to encryption and decryption using RSA with AES. The <see cref="IAsymmetricEncryptionProvider"/> from <see cref="KeyPair.RsaProvider"/> is used, or a default of <see cref="HitaiAsymmetricEncryptionProvider"/> is used.
+    ///     Provides shortcut to encryption and decryption using RSA with AES. The <see cref="IAsymmetricEncryptionProvider" />
+    ///     from <see cref="KeyPair.RsaProvider" /> is used, or a default of <see cref="HitaiAsymmetricEncryptionProvider" />
+    ///     is used.
     /// </summary>
     public class AsymmetricEncryptionController
     {
@@ -21,7 +19,8 @@ namespace Hitai.AsymmetricEncryption
         };
 
         /// <summary>
-        /// Encrypts <paramref name="data"/> for <paramref name="recipient"/>. <paramref name="recipient"/> can be a public key.
+        ///     Encrypts <paramref name="data" /> for <paramref name="recipient" />. <paramref name="recipient" /> can be a public
+        ///     key.
         /// </summary>
         /// <param name="recipient"></param>
         /// <param name="data"></param>
@@ -29,10 +28,10 @@ namespace Hitai.AsymmetricEncryption
         public static Message Encrypt(KeyPair recipient, byte[] data) {
             IAsymmetricEncryptionProvider provider = GetRsaProvider(recipient.RsaProvider);
             provider.SetKeyPair(recipient.ToPublic());
-            AesSymmetricEncryptionProvider aes = new AesSymmetricEncryptionProvider();
-            var cipher = aes.TransformAsync(data).Result;
-            var encryptedKey = provider.Encrypt(aes.Key);
-            Message m = new Message() {
+            var aes = new AesSymmetricEncryptionProvider();
+            byte[] cipher = aes.TransformAsync(data).Result;
+            byte[] encryptedKey = provider.Encrypt(aes.Key);
+            var m = new Message {
                 Content = cipher,
                 EncryptedKey = encryptedKey,
                 IV = aes.IV,
@@ -42,24 +41,27 @@ namespace Hitai.AsymmetricEncryption
         }
 
         private static IAsymmetricEncryptionProvider GetRsaProvider(int providerIndex) {
-            if (providerIndex < 0 || providerIndex > ProviderList.Length - 1) return new HitaiAsymmetricEncryptionProvider();
-            return (IAsymmetricEncryptionProvider)Activator.CreateInstance(ProviderList[providerIndex]);
+            if (providerIndex < 0 || providerIndex > ProviderList.Length - 1)
+                return new HitaiAsymmetricEncryptionProvider();
+            return (IAsymmetricEncryptionProvider) Activator.CreateInstance(
+                ProviderList[providerIndex]);
         }
 
         public static byte[] Decrypt(Message m, string password, KeyPair kp) {
-            if(m.RecipientId != kp.ShortId) throw new InvalidOperationException("Keypair does not match the recipient");
+            if (m.RecipientId != kp.ShortId)
+                throw new InvalidOperationException("Keypair does not match the recipient");
             IAsymmetricEncryptionProvider provider = GetRsaProvider(kp.RsaProvider);
             provider.SetKeyPair(kp, password);
-            var key = provider.Decrypt(m.EncryptedKey);
-            AesSymmetricEncryptionProvider aes = new AesSymmetricEncryptionProvider();
+            byte[] key = provider.Decrypt(m.EncryptedKey);
+            var aes = new AesSymmetricEncryptionProvider();
             aes.Key = key;
             aes.IV = m.IV;
             return aes.TransformAsync(m.Content, false).Result;
         }
 
         public static byte[] Decrypt(Message m, string password, Keychain kc) {
-            var key = kc.Keys.FirstOrDefault(x => x.ShortId == m.RecipientId);
-            if(key == null) throw new Exception("Recipient's key is absent from keychain");
+            KeyPair key = kc.Keys.FirstOrDefault(x => x.ShortId == m.RecipientId);
+            if (key == null) throw new Exception("Recipient's key is absent from keychain");
             return Decrypt(m, password, key);
         }
 
@@ -86,7 +88,7 @@ namespace Hitai.AsymmetricEncryption
         }
 
         public static bool Verify(Signature s, Keychain kc) {
-            var key = kc.Keys.FirstOrDefault(x => x.ShortId == s.AuthorId);
+            KeyPair key = kc.Keys.FirstOrDefault(x => x.ShortId == s.AuthorId);
             if (key == null) throw new Exception("Recipient's key is absent from keychain");
             return Verify(s, key);
         }

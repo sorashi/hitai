@@ -1,11 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace Hitai.Dialogs
@@ -17,13 +12,17 @@ namespace Hitai.Dialogs
             label_confirmation.Text = "";
             label_strength.Text = "";
         }
+
         public string Password { get; set; }
+
         private void textBox_password_TextChanged(object sender, EventArgs e) {
-            if(RateStrength(textBox_password.Text)) {
+            if (RateStrength(textBox_password.Text)) {
                 label_strength.Text = "Heslo je dostatečně silné.";
                 label_strength.ForeColor = Color.Green;
-            }else {
-                label_strength.Text = "Heslo musí obsahovat číslici, velké a malé písmeno a musí být nejméně 8 znaků dlouhé.";
+            }
+            else {
+                label_strength.Text =
+                    "Heslo musí obsahovat číslici, velké a malé písmeno a musí být nejméně 8 znaků dlouhé.";
                 label_strength.ForeColor = Color.Red;
             }
         }
@@ -40,7 +39,7 @@ namespace Hitai.Dialogs
         }
 
         private void textBox_confirm_TextChanged(object sender, EventArgs e) {
-            if(textBox_password.Text == textBox_confirm.Text) {
+            if (textBox_password.Text == textBox_confirm.Text) {
                 label_confirmation.Text = "Hesla se shodují.";
                 label_confirmation.ForeColor = Color.Green;
             }
@@ -51,26 +50,27 @@ namespace Hitai.Dialogs
         }
 
         private void butCancel_Click(object sender, EventArgs e) {
-            this.DialogResult = DialogResult.Cancel;
-            this.Close();
+            DialogResult = DialogResult.Cancel;
+            Close();
         }
 
         private void butOk_Click(object sender, EventArgs e) {
-            if(textBox_password.Text != textBox_confirm.Text || !RateStrength(textBox_password.Text)) {
-                MessageBox.Show("Prosím zkontrolujte chybové hlášky. Něco s Vaším heslem není v pořádku.");
+            if (textBox_password.Text != textBox_confirm.Text ||
+                !RateStrength(textBox_password.Text)) {
+                MessageBox.Show(
+                    "Prosím zkontrolujte chybové hlášky. Něco s Vaším heslem není v pořádku.");
                 return;
             }
-            this.DialogResult = DialogResult.OK;
+
+            DialogResult = DialogResult.OK;
             Password = textBox_password.Text;
-            this.Close();
+            Close();
         }
 
         private void label_confirmation_Click(object sender, EventArgs e) {
-
         }
 
         private void label_strength_Click(object sender, EventArgs e) {
-
         }
     }
 }

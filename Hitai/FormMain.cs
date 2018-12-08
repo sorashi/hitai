@@ -1,8 +1,5 @@
-﻿using Hitai.Dialogs;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Numerics;
@@ -11,6 +8,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using Hitai.ArmorProviders;
 using Hitai.AsymmetricEncryption;
+using Hitai.Dialogs;
 using Hitai.Math;
 using Hitai.Models;
 using MessagePack;
@@ -25,10 +23,12 @@ namespace Hitai
             comboBox_actions.SelectedIndex = 0;
             label_errors.Text = "";
             NewPrimes();
-            Recompute().ContinueWith(x => {
-                if(x.Result)
-                    numeric_m.Value = (new Random()).Next(System.Math.Min(100, N-4), System.Math.Min(300, N-1));
-            });
+            Recompute()
+                .ContinueWith(x => {
+                    if (x.Result)
+                        numeric_m.Value = new Random().Next(System.Math.Min(100, N - 4),
+                            System.Math.Min(300, N - 1));
+                });
         }
 
         public Keychain Keychain { get; set; }
@@ -45,9 +45,8 @@ namespace Hitai
         }
 
         private async void buttonDeleteKey_Click(object sender, EventArgs e) {
-            foreach (var keypair in userControlKeychain1.SelectedItems) {
+            foreach (KeyPair keypair in userControlKeychain1.SelectedItems)
                 await Keychain.RemoveKeyPair(keypair);
-            }
         }
 
         private async void buttonGenerateNewPair_Click(object sender, EventArgs e) {
@@ -59,9 +58,9 @@ namespace Hitai
         private void butProvest_Click(object sender, EventArgs e) {
             // TODO allow file import
             // todo make async
-            var content = Encoding.UTF8.GetBytes(textBox1.Text);
-            var chosenKeypair = ucKeychain_mainTab.SelectedItems.FirstOrDefault();
-            IArmorProvider armorProvider = new ArmorProviders.HitaiArmorProvider();
+            byte[] content = Encoding.UTF8.GetBytes(textBox1.Text);
+            KeyPair chosenKeypair = ucKeychain_mainTab.SelectedItems.FirstOrDefault();
+            IArmorProvider armorProvider = new HitaiArmorProvider();
             Message message;
             PasswordInputDialog passwordDialog;
             Signature signature;
@@ -72,15 +71,18 @@ namespace Hitai
                         MessageBox.Show("Musíte vybrat klíč adresáta.");
                         return;
                     }
+
                     message = AsymmetricEncryptionController.Encrypt(chosenKeypair, content);
-                    var armor = armorProvider.ToArmor(MessagePack.LZ4MessagePackSerializer.Serialize(message), ArmorType.Message);
-                    var result = Encoding.UTF8.GetString(armor);
+                    byte[] armor =
+                        armorProvider.ToArmor(LZ4MessagePackSerializer.Serialize(message),
+                            ArmorType.Message);
+                    string result = Encoding.UTF8.GetString(armor);
                     Clipboard.SetText(result);
                     MessageBox.Show("Výsledek byl zkopírován do schránky.");
                     break;
                 case 1: // dešifrovat
-                    var armorClass = ArmorRecognizer.RecognizeArmor(content);
-                    armorProvider = (IArmorProvider)Activator.CreateInstance(armorClass);
+                    Type armorClass = ArmorRecognizer.RecognizeArmor(content);
+                    armorProvider = (IArmorProvider) Activator.CreateInstance(armorClass);
                     (byte[] bytes, ArmorType armorType) = armorProvider.FromArmor(content);
                     // TODO nechat rozpoznat akci podle ArmorType
                     if (armorType != ArmorType.Message) {
@@ -88,21 +90,21 @@ namespace Hitai
                         return;
                     }
 
-                    message = MessagePack.LZ4MessagePackSerializer.Deserialize<Message>(bytes);
-                    var recipient =
+                    message = LZ4MessagePackSerializer.Deserialize<Message>(bytes);
+                    KeyPair recipient =
                         Keychain.Keys.FirstOrDefault(x => x.ShortId == message.RecipientId);
                     if (recipient == null) {
                         MessageBox.Show("Nebyl nalezen odpovídající soukromý klíč.");
                         return;
                     }
+
                     passwordDialog = new PasswordInputDialog("Dešifrování");
-                    if (passwordDialog.ShowDialog() != DialogResult.OK) {
-                        return;
-                    }
+                    if (passwordDialog.ShowDialog() != DialogResult.OK) return;
                     // todo catch wrong password
-                    var data = AsymmetricEncryptionController.Decrypt(message, passwordDialog.Password,
+                    byte[] data = AsymmetricEncryptionController.Decrypt(message,
+                        passwordDialog.Password,
                         recipient);
-                    var clearText = Encoding.UTF8.GetString(data);
+                    string clearText = Encoding.UTF8.GetString(data);
                     textBox1.Text = clearText;
                     break;
                 case 2: // podepsat
@@ -110,14 +112,15 @@ namespace Hitai
                         MessageBox.Show("Podepisující klíč musí být soukromý.");
                         return;
                     }
+
                     passwordDialog = new PasswordInputDialog("Podepisování");
-                    if (passwordDialog.ShowDialog() != DialogResult.OK) {
-                        return;
-                    }
+                    if (passwordDialog.ShowDialog() != DialogResult.OK) return;
                     // todo catch wrong password
-                    signature = AsymmetricEncryptionController.Sign(Encoding.UTF8.GetBytes(textBox1.Text),
+                    signature = AsymmetricEncryptionController.Sign(
+                        Encoding.UTF8.GetBytes(textBox1.Text),
                         passwordDialog.Password, chosenKeypair);
-                    Clipboard.SetText(Encoding.UTF8.GetString(armorProvider.ToArmor(LZ4MessagePackSerializer.Serialize(signature),
+                    Clipboard.SetText(Encoding.UTF8.GetString(armorProvider.ToArmor(
+                        LZ4MessagePackSerializer.Serialize(signature),
                         ArmorType.Signature)));
                     MessageBox.Show("Výsledek byl zkopírován do schránky");
                     break;
@@ -147,16 +150,17 @@ namespace Hitai
                                         : " pro zprávu:\n" + clearText2));
                     break;
                 case 4: // šifrovat a podepsat
-                    var chooseKeyDialog = new ChooseKeyDialog("Vyberte klíč, kterým chcete zprávu podepsat.") { Keychain = Keychain };
+                    var chooseKeyDialog =
+                        new ChooseKeyDialog("Vyberte klíč, kterým chcete zprávu podepsat.")
+                            {Keychain = Keychain};
                     if (chooseKeyDialog.ShowDialog() != DialogResult.OK)
                         return;
                     message = AsymmetricEncryptionController.Encrypt(chosenKeypair, content);
                     passwordDialog = new PasswordInputDialog("Podepisování");
-                    if (passwordDialog.ShowDialog() != DialogResult.OK) {
-                        return;
-                    }
+                    if (passwordDialog.ShowDialog() != DialogResult.OK) return;
                     // todo catch wrong password
-                    signature = AsymmetricEncryptionController.Sign(message, passwordDialog.Password, chooseKeyDialog.ChosenKeyPair);
+                    signature = AsymmetricEncryptionController.Sign(message,
+                        passwordDialog.Password, chooseKeyDialog.ChosenKeyPair);
                     result = Encoding.UTF8.GetString(armorProvider.ToArmor(
                         LZ4MessagePackSerializer.Serialize(signature),
                         ArmorType.SignedMessage));
@@ -165,7 +169,7 @@ namespace Hitai
                     break;
                 case 5: // dešifrovat a ověřit
                     armorProvider =
-                        (IArmorProvider)Activator.CreateInstance(
+                        (IArmorProvider) Activator.CreateInstance(
                             ArmorRecognizer.RecognizeArmor(content));
                     (byte[] bytes3, ArmorType armorType3) = armorProvider.FromArmor(content);
                     if (armorType3 != ArmorType.SignedMessage) {
@@ -186,12 +190,13 @@ namespace Hitai
                             "Podpis neobsahuje zašifrovanou zprávu. Chyba.");
                         return;
                     }
+
                     passwordDialog = new PasswordInputDialog("Dešifrování");
-                    if (passwordDialog.ShowDialog() != DialogResult.OK) {
-                        return;
-                    }
+                    if (passwordDialog.ShowDialog() != DialogResult.OK) return;
                     // todo catch wrong password
-                    result = Encoding.UTF8.GetString(AsymmetricEncryptionController.Decrypt(signature.GetMessage(), passwordDialog.Password, Keychain));
+                    result = Encoding.UTF8.GetString(
+                        AsymmetricEncryptionController.Decrypt(signature.GetMessage(),
+                            passwordDialog.Password, Keychain));
                     MessageBox.Show(
                         "Podpis byl úspěšně ověřen a dešifrovaná zpráva bude zobrazena.");
                     textBox1.Text = result;
@@ -199,52 +204,60 @@ namespace Hitai
                 default:
                     throw new NotImplementedException();
             }
-
         }
 
         private void ComboBox_actions_SelectedIndexChanged(object sender, EventArgs e) {
         }
+
         #region insight
 
         public int P {
-            get { return (int) numeric_p.Value; }
-            set { numeric_p.Value = value; }
+            get => (int) numeric_p.Value;
+            set => numeric_p.Value = value;
         }
 
         public int Q {
-            get { return (int) numeric_q.Value; }
-            set { numeric_q.Value = value; } }
+            get => (int) numeric_q.Value;
+            set => numeric_q.Value = value;
+        }
 
         private int _d;
+
         public int D {
             get => _d;
-            set { textBox_d.Text = value.ToString();
+            set {
+                textBox_d.Text = value.ToString();
                 _d = value;
             }
         }
 
         private int _e;
+
         public int E {
             get => _e;
-            set { textBox_e.Text = value.ToString();
+            set {
+                textBox_e.Text = value.ToString();
                 _e = value;
             }
         }
 
         private int _n;
+
         public int N {
             get => _n;
-            set { textBox_modulus.Text = value.ToString();
+            set {
+                textBox_modulus.Text = value.ToString();
                 _n = value;
             }
         }
 
         public int K {
-            set { textBox_k.Text = value.ToString(); }
+            set => textBox_k.Text = value.ToString();
         }
+
         private void NewPrimes() {
             var r = new Random();
-            var p = PrimeGenerator.Primes[r.Next(PrimeGenerator.Primes.Length)];
+            int p = PrimeGenerator.Primes[r.Next(PrimeGenerator.Primes.Length)];
             int q;
             do {
                 q = PrimeGenerator.Primes[r.Next(PrimeGenerator.Primes.Length)];
@@ -255,51 +268,52 @@ namespace Hitai
         }
 
         private async Task<bool> Recompute() {
-            Queue<string> errors = new Queue<string>();
+            var errors = new Queue<string>();
             if (!PrimeGenerator.IsPrime(P)) {
                 errors.Enqueue("P není prvočíslo.");
                 numeric_p.BackColor = Color.PaleVioletRed;
             }
-            else numeric_p.BackColor = SystemColors.Window;
+            else {
+                numeric_p.BackColor = SystemColors.Window;
+            }
+
             if (!PrimeGenerator.IsPrime(Q)) {
                 errors.Enqueue("Q není prvočíslo.");
                 numeric_q.BackColor = Color.PaleVioletRed;
             }
-            else numeric_q.BackColor = SystemColors.Window;
-
-            if (P == Q) {
-                errors.Enqueue("P a Q musí být odlišná.");
+            else {
+                numeric_q.BackColor = SystemColors.Window;
             }
+
+            if (P == Q) errors.Enqueue("P a Q musí být odlišná.");
             if (errors.Count > 0) {
                 label_errors.Text = string.Join("\n", errors);
                 return false;
             }
-            else label_errors.Text = "";
-            var phiN = (P - 1) * (Q - 1);
-            var n = P * Q;
+
+            label_errors.Text = "";
+
+            int phiN = (P - 1) * (Q - 1);
+            int n = P * Q;
             int e = -1;
-            int[] exponents = {1 << 4 | 1, 1 << 8 | 1, 1 << 16 | 1};
-            foreach (int candidate in exponents) {
+            int[] exponents = {(1 << 4) | 1, (1 << 8) | 1, (1 << 16) | 1};
+            foreach (int candidate in exponents)
                 if (PrimeGenerator.GreatestCommonDivisor(phiN, candidate) == 1) {
                     e = candidate;
                     break;
                 }
-            }
 
-            if (e == -1) {
-                // todo handle this
-                return false;
-            }
+            if (e == -1) return false;
 
-            var k =
-            await Task.Factory.StartNew(() => {
-                int x = 0;
-                while (true) {
-                    if ((1 + x * phiN) % e == 0) return x;
-                    x++;
-                }
-            });
-            var d = (1 + k * phiN) / e;
+            int k =
+                await Task.Factory.StartNew(() => {
+                    var x = 0;
+                    while (true) {
+                        if ((1 + x * phiN) % e == 0) return x;
+                        x++;
+                    }
+                });
+            int d = (1 + k * phiN) / e;
             E = e;
             D = d;
             N = n;
@@ -310,24 +324,25 @@ namespace Hitai
 
         private void EncryptDecryptM() {
             var m = (int) numeric_m.Value;
-            var c = BigInteger.ModPow(m, E, N);
+            BigInteger c = BigInteger.ModPow(m, E, N);
             textBox_c.Text = c.ToString();
-            var backM = BigInteger.ModPow(c, D, N);
+            BigInteger backM = BigInteger.ModPow(c, D, N);
             textBox_backM.Text = backM.ToString();
         }
+
         private async void But_newPrimes_Click(object sender, EventArgs e) {
             NewPrimes();
-            if(await Recompute())
+            if (await Recompute())
                 EncryptDecryptM();
         }
 
         private async void Numeric_p_ValueChanged(object sender, EventArgs e) {
-            if(await Recompute())
+            if (await Recompute())
                 EncryptDecryptM();
         }
 
         private async void Numeric_q_ValueChanged(object sender, EventArgs e) {
-            if(await Recompute())
+            if (await Recompute())
                 EncryptDecryptM();
         }
 
@@ -336,8 +351,8 @@ namespace Hitai
         }
 
         private void TabPageInsightKeyGenerator_Click(object sender, EventArgs e) {
-
         }
+
         #endregion
     }
 }

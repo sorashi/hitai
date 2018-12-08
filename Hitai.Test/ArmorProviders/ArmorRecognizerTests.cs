@@ -1,6 +1,4 @@
-﻿using System;
-using NUnit.Framework;
-using Hitai.ArmorProviders;
+﻿using NUnit.Framework;
 
 namespace Hitai.ArmorProviders.Tests
 {

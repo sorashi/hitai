@@ -4,31 +4,30 @@ using System.IO;
 namespace Hitai.IO
 {
     /// <summary>
-    /// Stream pro čtení a zapisování jednotlivých bitů
+    ///     Stream pro čtení a zapisování jednotlivých bitů
     /// </summary>
     [Obsolete]
     public class BitStream : Stream
     {
         /// <summary>
-        /// Pozice bitu (0-7) v aktualnim bajtu
+        ///     Pozice bitu (0-7) v aktualnim bajtu
         /// </summary>
         private long _bitPosition;
 
         /// <summary>
-        /// Pozice v <see cref="_source"/>
+        ///     Pozice v <see cref="_source" />
         /// </summary>
         private long _bytePosition;
 
-        private long _length;
-        private byte[] _source;
+        private readonly byte[] _source;
 
-        public BitStream(byte[] source) : base() {
+        public BitStream(byte[] source) {
             _source = source;
-            _length = source.Length * 8;
+            Length = source.Length * 8;
         }
 
-        public BitStream(long length) : base() {
-            _length = length;
+        public BitStream(long length) {
+            Length = length;
             _source = new byte[length / 8 + (length % 8 > 0 ? 1 : 0)];
         }
 
@@ -39,12 +38,12 @@ namespace Hitai.IO
         public override bool CanWrite => true;
 
         /// <summary>
-        /// Delka streamu v bitech
+        ///     Delka streamu v bitech
         /// </summary>
-        public override long Length => _length;
+        public override long Length { get; }
 
         /// <summary>
-        /// Pozice streamu v bitech
+        ///     Pozice streamu v bitech
         /// </summary>
         public override long Position {
             get => _bytePosition * 8 + _bitPosition;
@@ -59,7 +58,7 @@ namespace Hitai.IO
         }
 
         /// <summary>
-        /// Cte bity ze streamu do bufferu
+        ///     Cte bity ze streamu do bufferu
         /// </summary>
         /// <param name="buffer"></param>
         /// <param name="offset">Offset v bitech</param>
@@ -69,10 +68,10 @@ namespace Hitai.IO
             if (buffer == null) Error.BufferNull();
             if (offset + count > buffer.Length * 8) Error.BufferOverflow();
             if (offset < 0 || count < 0) Error.OffsetOrCountNegative();
-            var toRead = System.Math.Min(Length - Position, count);
+            long toRead = System.Math.Min(Length - Position, count);
             WriteBitsFromTo(_source, buffer, Position, offset, toRead);
             Position += toRead;
-            return (int)toRead;
+            return (int) toRead;
         }
 
         public override long Seek(long offset, SeekOrigin origin) {
@@ -92,7 +91,7 @@ namespace Hitai.IO
         }
 
         public byte[] ToByteArray() {
-            return (byte[])_source.Clone();
+            return (byte[]) _source.Clone();
         }
 
         public override void Write(byte[] buffer, int offset, int count) {
@@ -104,35 +103,47 @@ namespace Hitai.IO
             Position += count;
         }
 
-        private void WriteBitsFromTo(byte[] from, byte[] to, long offsetFrom, long offsetTo, long count) {
+        private void WriteBitsFromTo(byte[] from, byte[] to, long offsetFrom, long offsetTo,
+            long count) {
             if (from == null || to == null) Error.BufferNull();
-            if (offsetFrom + count > from.Length * 8 || offsetTo + count > to.Length * 8) throw new ArgumentException();
+            if (offsetFrom + count > from.Length * 8 || offsetTo + count > to.Length * 8)
+                throw new ArgumentException();
             if (offsetFrom < 0 || offsetTo < 0 || count < 0) Error.OffsetOrCountNegative();
             for (var c = 0; c < count; c++) {
-                var fromByte = (offsetFrom + c) / 8;
-                int fromBit = (int)((offsetFrom + c) % 8);
-                var toByte = (offsetTo + c) / 8;
-                int toBit = (int)((offsetTo + c) % 8);
+                long fromByte = (offsetFrom + c) / 8;
+                var fromBit = (int) ((offsetFrom + c) % 8);
+                long toByte = (offsetTo + c) / 8;
+                var toBit = (int) ((offsetTo + c) % 8);
                 // pokud cteme bit cislo 2 v bajtu, cteme tento bit:
                 // 0000 0000
                 //       ^  (indexujeme od 0 a cteme od LSB)
-                var bit = from[fromByte] & (1 << fromBit);
-                var isSet = bit != 0;
+                int bit = from[fromByte] & (1 << fromBit);
+                bool isSet = bit != 0;
                 if (isSet)
-                    to[toByte] |= (byte)(1 << toBit);
+                    to[toByte] |= (byte) (1 << toBit);
                 else
-                    to[toByte] &= (byte)~(1 << toBit);
+                    to[toByte] &= (byte) ~(1 << toBit);
             }
         }
+
         private static class Error
         {
-            public static void BitStreamNotExpandable() => throw new NotSupportedException("BitStream's internal buffer cannot be expanded.");
+            public static void BitStreamNotExpandable() {
+                throw new NotSupportedException("BitStream's internal buffer cannot be expanded.");
+            }
 
-            public static void BufferNull() => throw new ArgumentNullException("Buffer is null");
+            public static void BufferNull() {
+                throw new ArgumentNullException("Buffer is null");
+            }
 
-            public static void BufferOverflow() => throw new ArgumentException("The sum of offset and count is larger than the buffer length.");
+            public static void BufferOverflow() {
+                throw new ArgumentException(
+                    "The sum of offset and count is larger than the buffer length.");
+            }
 
-            public static void OffsetOrCountNegative() => throw new ArgumentOutOfRangeException("Offset or count is negative.");
+            public static void OffsetOrCountNegative() {
+                throw new ArgumentOutOfRangeException("Offset or count is negative.");
+            }
         }
     }
 }

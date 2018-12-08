@@ -1,14 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Hitai.ArmorProviders
 {
-    class RawDataArmorProvider : IArmorProvider
+    internal class RawDataArmorProvider : IArmorProvider
     {
-
         public ArmorType GetArmorType(byte[] armor) {
             throw new NotImplementedException();
         }

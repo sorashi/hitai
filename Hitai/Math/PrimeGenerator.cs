@@ -13,9 +13,9 @@ namespace Hitai.Math
         public static RNGCryptoServiceProvider random = new RNGCryptoServiceProvider();
 
         /// <summary>
-        /// First 400 primes
+        ///     First 400 primes
         /// </summary>
-        public static readonly int[] Primes = new[] {
+        public static readonly int[] Primes = {
             2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47, 53, 59, 61, 67, 71, 73, 79, 83,
             89, 97, 101, 103, 107, 109, 113, 127, 131, 137, 139, 149, 151, 157, 163, 167, 173, 179,
             181, 191, 193, 197, 199, 211, 223, 227, 229, 233, 239, 241, 251, 257, 263, 269, 271,
@@ -50,35 +50,33 @@ namespace Hitai.Math
             sito.Set(1, false);
             for (var i = 2; i < sito.Length; i++) {
                 if (!sito.Get(i)) continue;
-                for (var j = 2 * i; j < sito.Length; j += i) {
-                    sito.Set(j, false);
-                }
+                for (int j = 2 * i; j < sito.Length; j += i) sito.Set(j, false);
             }
 
             var list = new List<int>();
-            for (var i = 0; i < sito.Length; i++) {
-                if (sito.Get(i)) list.Add(i);
-            }
+            for (var i = 0; i < sito.Length; i++)
+                if (sito.Get(i))
+                    list.Add(i);
 
             return list;
         }
 
         /// <summary>
-        /// Checks whether <paramref name="n"/> is a prime with absolute certainty. The complexity is O(sqrt(n)).
+        ///     Checks whether <paramref name="n" /> is a prime with absolute certainty. The complexity is O(sqrt(n)).
         /// </summary>
         /// <param name="n"></param>
         /// <returns></returns>
         public static bool IsPrime(BigInteger n) {
             if ((n & 1) == 0)
                 return n == 2;
-            for (BigInteger i = 3; (i * i) <= n; i += 2)
-                if ((n % i) == 0)
+            for (BigInteger i = 3; i * i <= n; i += 2)
+                if (n % i == 0)
                     return false;
             return n != 1;
         }
 
         /// <summary>
-        /// Generates an n-bit integer, which has a very high probability of being a prime
+        ///     Generates an n-bit integer, which has a very high probability of being a prime
         /// </summary>
         /// <param name="bits"></param>
         /// <returns></returns>
@@ -100,10 +98,13 @@ namespace Hitai.Math
         }
 
         /// <summary>
-        /// Runs <see cref="GetProbablePrime(int)"/> in multiple threads and returns the first two results aquired
+        ///     Runs <see cref="GetProbablePrime(int)" /> in multiple threads and returns the first two results aquired
         /// </summary>
         /// <param name="bits"></param>
-        /// <param name="n">The number of threads to run, defaults to <see cref="Environment.ProcessorCount"/>, but has to be greater or equal to 2</param>
+        /// <param name="n">
+        ///     The number of threads to run, defaults to <see cref="Environment.ProcessorCount" />, but has to be
+        ///     greater or equal to 2
+        /// </param>
         /// <returns></returns>
         public static BigInteger[] GetTwoProbablePrimesParallel(int bits, int n = 0) {
             if (n == 0)
@@ -113,23 +114,22 @@ namespace Hitai.Math
             var results = new List<BigInteger>();
             var threads = new List<Thread>();
             var ts = new ThreadStart(() => results.Add(GetProbablePrime(bits)));
-            for (int i = 0; i < n; i++)
+            for (var i = 0; i < n; i++)
                 threads.Add(new Thread(ts));
-            foreach (var thread in threads)
+            foreach (Thread thread in threads)
                 thread.Start();
-            while (true) {
+            while (true)
                 if (results.Count >= 2) {
-                    foreach (var thread in threads)
+                    foreach (Thread thread in threads)
                         thread.Abort();
                     break;
                 }
-            }
 
             return results.Distinct().Take(2).ToArray();
         }
 
         /// <summary>
-        /// Executes <paramref name="k"/> rounds of the Fermat test on the candidate <paramref name="n"/>
+        ///     Executes <paramref name="k" /> rounds of the Fermat test on the candidate <paramref name="n" />
         /// </summary>
         /// <param name="n"></param>
         /// <param name="k"></param>
@@ -137,7 +137,7 @@ namespace Hitai.Math
         public static bool FermatTest(BigInteger n, int k) {
             if (n <= 3) throw new ArgumentException();
             for (; k > 0; k--) {
-                var a = RandomBigInteger(2, n - 2);
+                BigInteger a = RandomBigInteger(2, n - 2);
                 if (BigInteger.ModPow(a, n - 1, n) != 1) return false;
             }
 
@@ -145,7 +145,7 @@ namespace Hitai.Math
         }
 
         /// <summary>
-        /// Executes <paramref name="k"/> rounds of the Miller-Rabin test on the candidate <paramref name="n"/>
+        ///     Executes <paramref name="k" /> rounds of the Miller-Rabin test on the candidate <paramref name="n" />
         /// </summary>
         /// <param name="n"></param>
         /// <param name="k"></param>
@@ -162,7 +162,7 @@ namespace Hitai.Math
             outerLoop:
             for (; k > 0; k--) {
                 BigInteger a = RandomBigInteger(2, n - 2);
-                var x = BigInteger.ModPow(a, d, n);
+                BigInteger x = BigInteger.ModPow(a, d, n);
                 if (x == 1 || x == -1) continue;
                 for (BigInteger i = 0; i < r - 1; i++) {
                     x = BigInteger.ModPow(x, 2, n);
@@ -177,7 +177,7 @@ namespace Hitai.Math
         }
 
         /// <summary>
-        /// Generates a random n-bit odd integer
+        ///     Generates a random n-bit odd integer
         /// </summary>
         /// <param name="bits">n</param>
         /// <returns></returns>
@@ -196,7 +196,7 @@ namespace Hitai.Math
         public static BigInteger RandomBigInteger(BigInteger from, BigInteger to) {
             if (from > to) throw new ArgumentException();
             if (from == to) return to;
-            var buffer = to.ToByteArray();
+            byte[] buffer = to.ToByteArray();
             BigInteger result;
             do {
                 random.GetBytes(buffer);
@@ -207,8 +207,9 @@ namespace Hitai.Math
 
             return result;
         }
+
         /// <summary>
-        /// Nerekurzivní Euklidův algoritmus
+        ///     Nerekurzivní Euklidův algoritmus
         /// </summary>
         /// <param name="a"></param>
         /// <param name="b"></param>
@@ -219,6 +220,7 @@ namespace Hitai.Math
                 a = b;
                 b = tmp;
             }
+
             return a;
         }
     }

@@ -1,50 +1,51 @@
-﻿using Hitai.AsymmetricEncryption;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
+﻿using System;
+using System.Net.Mail;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Hitai.AsymmetricEncryption;
 
 namespace Hitai.Dialogs
 {
     public partial class GenerateKeyPairDialog : Form
     {
+        private IAsymmetricEncryptionProvider aep;
+
         public GenerateKeyPairDialog() {
             InitializeComponent();
             comboBox_model.SelectedIndex = 0;
             dateTimePicker.MinDate = DateTime.Now;
             dateTimePicker.Value = DateTime.Now.AddYears(4);
         }
-        IAsymmetricEncryptionProvider aep;
+
         public KeyPair Keypair { get; set; }
+
         private async void butGenerate_Click(object sender, EventArgs e) {
             // validate form
             textBox_name.Text = textBox_name.Text.Trim();
-            var nameValid = !string.IsNullOrWhiteSpace(textBox_name.Text);
+            bool nameValid = !string.IsNullOrWhiteSpace(textBox_name.Text);
             textBox_email.Text = textBox_email.Text.Trim();
-            var emailValid = !string.IsNullOrWhiteSpace(textBox_email.Text);
-            if(emailValid)
+            bool emailValid = !string.IsNullOrWhiteSpace(textBox_email.Text);
+            if (emailValid)
                 try {
-                    new System.Net.Mail.MailAddress(textBox_email.Text);
+                    new MailAddress(textBox_email.Text);
                 }
                 catch {
                     emailValid = false;
                 }
-            if(!nameValid) {
+
+            if (!nameValid) {
                 MessageBox.Show("Jméno musí být vyplněno.");
                 return;
             }
-            if(!emailValid) {
+
+            if (!emailValid) {
                 MessageBox.Show("E-mail není v pořádku.");
                 return;
             }
-            this.butGenerate.Enabled = false;
+
+            butGenerate.Enabled = false;
             progressBar.Style = ProgressBarStyle.Marquee;
-            var selectedItem = comboBox_model.SelectedIndex;
+            int selectedItem = comboBox_model.SelectedIndex;
             await Task.Factory.StartNew(() => {
                 switch (selectedItem) {
                     case 0: // .NET RSA
@@ -60,27 +61,28 @@ namespace Hitai.Dialogs
                 }
             });
             progressBar.Style = ProgressBarStyle.Continuous;
-            this.butGenerate.Enabled = true;
+            butGenerate.Enabled = true;
             var passwordCreationDialog = new CreatePasswordDialog();
-            if(passwordCreationDialog.ShowDialog() != DialogResult.OK)
+            if (passwordCreationDialog.ShowDialog() != DialogResult.OK)
                 return;
             Keypair = aep.GetPrivateKey(passwordCreationDialog.Password);
             Keypair.CreationTime = DateTime.Now;
             Keypair.Expires = dateTimePicker.Value;
             Keypair.UserId = $"{textBox_name.Text} <{textBox_email.Text}>";
-            Keypair.RsaProvider = Array.IndexOf(AsymmetricEncryptionController.ProviderList, aep.GetType());
+            Keypair.RsaProvider =
+                Array.IndexOf(AsymmetricEncryptionController.ProviderList, aep.GetType());
             textBox_id.Text = Keypair.ShortId;
-            this.butSave.Enabled = true;
+            butSave.Enabled = true;
         }
 
         private void butCancel_Click(object sender, EventArgs e) {
             DialogResult = DialogResult.Cancel;
-            this.Close();
+            Close();
         }
 
         private void butSave_Click(object sender, EventArgs e) {
             DialogResult = DialogResult.OK;
-            this.Close();
+            Close();
         }
     }
 }

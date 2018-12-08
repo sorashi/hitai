@@ -1,7 +1,7 @@
-﻿using MessagePack;
-using System.IO;
+﻿using System.IO;
 using System.Security.Cryptography;
 using System.Threading.Tasks;
+using MessagePack;
 
 namespace Hitai.SymmetricEncryption
 {
@@ -22,12 +22,15 @@ namespace Hitai.SymmetricEncryption
             set => Aes.Key = value;
         }
 
-        [Key(2)]
-        public byte[] Salt { get; private set; } = null;
+        [Key(2)] public byte[] Salt { get; private set; }
 
-        public void NewIV() => Aes.GenerateIV();
+        public void NewIV() {
+            Aes.GenerateIV();
+        }
 
-        public void GenerateKey() => Aes.GenerateKey();
+        public void GenerateKey() {
+            Aes.GenerateKey();
+        }
 
         public void GenerateKeyFromPassword(string password, int saltSize = 16) {
             var pbkdf = new Rfc2898DeriveBytes(password, saltSize);
@@ -42,7 +45,7 @@ namespace Hitai.SymmetricEncryption
         }
 
         /// <summary>
-        /// Encrypts or decrypts <paramref name="data"/>
+        ///     Encrypts or decrypts <paramref name="data" />
         /// </summary>
         /// <param name="data"></param>
         /// <param name="encrypt">True for encrypt, false for decrypt</param>
@@ -57,6 +60,7 @@ namespace Hitai.SymmetricEncryption
                     cs.Write(data, 0, data.Length);
                     await cs.FlushAsync();
                 }
+
                 await ms.FlushAsync();
                 return ms.ToArray();
             }

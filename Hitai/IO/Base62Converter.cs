@@ -1,23 +1,17 @@
-﻿using System;
-using System.IO;
-using System.Linq;
-using System.Text;
-using Hitai.IO;
-using Base62;
+﻿using Base62;
 
 namespace Hitai.IO
 {
     public class Base62Converter
     {
-        public byte[] FromBase62String(string base62)
-        {
+        public byte[] FromBase62String(string base62) {
             return base62.FromBase62();
         }
 
-        public string ToBase62String(byte[] original)
-        {
+        public string ToBase62String(byte[] original) {
             return original.ToBase62();
         }
+
         /*
             public const int Radix = 62;
 
