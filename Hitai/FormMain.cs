@@ -45,7 +45,7 @@ namespace Hitai
         }
 
         private async void buttonDeleteKey_Click(object sender, EventArgs e) {
-            foreach (KeyPair keypair in userControlKeychain1.SelectedItems)
+            foreach (Keypair keypair in userControlKeychain1.SelectedItems)
                 await Keychain.RemoveKeyPair(keypair);
         }
 
@@ -59,7 +59,7 @@ namespace Hitai
             // TODO allow file import
             // todo make async
             byte[] content = Encoding.UTF8.GetBytes(textBox1.Text);
-            KeyPair chosenKeypair = ucKeychain_mainTab.SelectedItems.FirstOrDefault();
+            Keypair chosenKeypair = ucKeychain_mainTab.SelectedItems.FirstOrDefault();
             IArmorProvider armorProvider = new HitaiArmorProvider();
             Message message;
             PasswordInputDialog passwordDialog;
@@ -91,7 +91,7 @@ namespace Hitai
                     }
 
                     message = LZ4MessagePackSerializer.Deserialize<Message>(bytes);
-                    KeyPair recipient =
+                    Keypair recipient =
                         Keychain.Keys.FirstOrDefault(x => x.ShortId == message.RecipientId);
                     if (recipient == null) {
                         MessageBox.Show("Nebyl nalezen odpovídající soukromý klíč.");
@@ -160,7 +160,7 @@ namespace Hitai
                     if (passwordDialog.ShowDialog() != DialogResult.OK) return;
                     // todo catch wrong password
                     signature = AsymmetricEncryptionController.Sign(message,
-                        passwordDialog.Password, chooseKeyDialog.ChosenKeyPair);
+                        passwordDialog.Password, chooseKeyDialog.ChosenKeypair);
                     result = Encoding.UTF8.GetString(armorProvider.ToArmor(
                         LZ4MessagePackSerializer.Serialize(signature),
                         ArmorType.SignedMessage));

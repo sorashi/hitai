@@ -25,7 +25,7 @@ namespace Hitai.Dialogs
             set => userControlKeychain1.Keychain = value;
         }
 
-        public KeyPair ChosenKeyPair => userControlKeychain1.SelectedItems.FirstOrDefault();
+        public Keypair ChosenKeypair => userControlKeychain1.SelectedItems.FirstOrDefault();
 
         private void ChooseKeyDialog_Load(object sender, EventArgs e) {
         }

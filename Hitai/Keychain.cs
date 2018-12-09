@@ -10,7 +10,7 @@ namespace Hitai
 {
     public class Keychain
     {
-        public delegate void KeypairEventDelegate(KeyPair keypair);
+        public delegate void KeypairEventDelegate(Keypair keypair);
 
         /// <summary>
         ///     Mutex pro datovou složku Keys
@@ -18,7 +18,7 @@ namespace Hitai
         private static readonly SemaphoreSlim KeysSemaphore = new SemaphoreSlim(1, 1);
 
         private static Keychain _instance;
-        public List<KeyPair> Keys = new List<KeyPair>();
+        public List<Keypair> Keys = new List<Keypair>();
 
         private Keychain() {
         }
@@ -37,7 +37,7 @@ namespace Hitai
                 var keychain = new Keychain();
                 if (!Directory.Exists(folder)) return keychain;
                 foreach (string file in Directory.GetFiles(folder))
-                    keychain.Keys.Add(await KeyPair.LoadAsync(file));
+                    keychain.Keys.Add(await Keypair.LoadAsync(file));
                 return keychain;
             }
             finally {
@@ -50,7 +50,7 @@ namespace Hitai
         /// </summary>
         /// <param name="key"></param>
         /// <returns></returns>
-        public async Task<int> AddKeyPair(KeyPair key) {
+        public async Task<int> AddKeyPair(Keypair key) {
             await KeysSemaphore.WaitAsync();
             try {
                 Keys.Add(key);
@@ -71,10 +71,10 @@ namespace Hitai
         /// </summary>
         /// <param name="index"></param>
         /// <returns></returns>
-        public async Task<KeyPair> RemoveKeyPair(int index) {
+        public async Task<Keypair> RemoveKeyPair(int index) {
             await KeysSemaphore.WaitAsync();
             try {
-                KeyPair removed = Keys[index];
+                Keypair removed = Keys[index];
                 await RemoveKeyPair(removed);
                 return removed;
             }
@@ -83,7 +83,7 @@ namespace Hitai
             }
         }
 
-        public async Task RemoveKeyPair(KeyPair key) {
+        public async Task RemoveKeyPair(Keypair key) {
             await LockOperation(async () => {
                 if (!Keys.Remove(key)) throw new Exception("Keypair was not found");
                 string path = Path.Combine(Settings.KeychainFolder, $"{key.ShortId}.hit");

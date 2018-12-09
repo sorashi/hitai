@@ -37,17 +37,17 @@ namespace Hitai.AsymmetricEncryption
             return _rsa.VerifyData(data, SHA256.Create(), signature);
         }
 
-        public KeyPair GetPrivateKey(string password) {
+        public Keypair GetPrivateKey(string password) {
             if (_rsa.PublicOnly)
                 throw new InvalidOperationException("The keypair contains only public information");
             return RsaParametersToKeyPairAsync(_rsa.ExportParameters(true), password).Result;
         }
 
-        public KeyPair GetPublicKey() {
+        public Keypair GetPublicKey() {
             return RsaParametersToKeyPairAsync(_rsa.ExportParameters(false)).Result;
         }
 
-        public void SetKeyPair(KeyPair kp, string password = null) {
+        public void SetKeyPair(Keypair kp, string password = null) {
             if (kp.IsPrivate && password == null)
                 throw new ArgumentException("Missing password");
             _rsa.ImportParameters(new RSAParameters {
@@ -82,9 +82,9 @@ namespace Hitai.AsymmetricEncryption
             return _rsa.VerifyHash(hash, CryptoConfig.MapNameToOID("SHA256"), signature);
         }
 
-        private async Task<KeyPair> RsaParametersToKeyPairAsync(RSAParameters parameters,
+        private async Task<Keypair> RsaParametersToKeyPairAsync(RSAParameters parameters,
             string password = null) {
-            var kp = new KeyPair {
+            var kp = new Keypair {
                 Modulus = new BigInteger(parameters.Modulus),
                 Exponent = new BigInteger(parameters.Exponent)
             };
@@ -96,14 +96,14 @@ namespace Hitai.AsymmetricEncryption
         }
 
 
-        //public class KeyPair
+        //public class Keypair
         //{
         //    public BigInteger Modulus { get; set; }
         //    public BigInteger Exponent { get; set; }
         //    public BigInteger? PrivateExponent { get; set; }
-        //    public static KeyPair FromRsaParameters(RSAParameters parameters)
+        //    public static Keypair FromRsaParameters(RSAParameters parameters)
         //    {
-        //        var kp = new KeyPair();
+        //        var kp = new Keypair();
         //        if(parameters.D != null)
         //            kp.PrivateExponent = new BigInteger(parameters.D);
         //        kp.Modulus = new BigInteger(parameters.Modulus);

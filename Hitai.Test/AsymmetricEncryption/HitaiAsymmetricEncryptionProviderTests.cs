@@ -24,7 +24,7 @@ namespace Hitai.Test.AsymmetricEncryption
         public void Setup() {
             _rsa = new HitaiAsymmetricEncryptionProvider();
             _rsaPublic = new HitaiAsymmetricEncryptionProvider();
-            var kp = new KeyPair {
+            var kp = new Keypair {
                 Exponent = _e,
                 Modulus = _n
             };

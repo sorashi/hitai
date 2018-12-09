@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
+using Hitai.AsymmetricEncryption;
 using MessagePack;
 
 namespace Hitai.Models
@@ -15,7 +16,7 @@ namespace Hitai.Models
         private Message _message;
 
         /// <summary>
-        ///     The <see cref="AsymmetricEncryption.KeyPair.ShortId" /> of the signature's author
+        ///     The <see cref="Keypair.ShortId" /> of the signature's author
         /// </summary>
         [Key(0)]
         public string AuthorId { get; set; }

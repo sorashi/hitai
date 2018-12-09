@@ -35,14 +35,14 @@ namespace Hitai.Test.AsymmetricEncryption
         [Test]
         public void GetPrivateKeyTest() {
             Assert.Throws<InvalidOperationException>(() => _rsaPublic.GetPrivateKey("password"));
-            KeyPair key = _rsa.GetPrivateKey("password");
+            Keypair key = _rsa.GetPrivateKey("password");
             Assert.IsNotNull(key.PrivateExponent);
         }
 
         [Test]
         public void GetPublicKeyTest() {
-            KeyPair key = _rsa.GetPublicKey();
-            KeyPair key2 = _rsaPublic.GetPublicKey();
+            Keypair key = _rsa.GetPublicKey();
+            Keypair key2 = _rsaPublic.GetPublicKey();
             Assert.AreEqual(key.Modulus, key2.Modulus);
             Assert.AreEqual(key.Exponent, key2.Exponent);
             Assert.IsNull(key.PrivateExponent);

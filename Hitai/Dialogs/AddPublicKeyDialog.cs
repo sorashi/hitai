@@ -34,7 +34,7 @@ namespace Hitai.Dialogs
                 return;
             }
 
-            await Keychain.AddKeyPair(KeyPair.FromMessagePack(rawData));
+            await Keychain.AddKeyPair(Keypair.FromMessagePack(rawData));
             DialogResult = DialogResult.OK;
             Close();
         }

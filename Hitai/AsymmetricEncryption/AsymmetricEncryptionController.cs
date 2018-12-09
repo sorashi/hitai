@@ -8,7 +8,7 @@ namespace Hitai.AsymmetricEncryption
 {
     /// <summary>
     ///     Provides shortcut to encryption and decryption using RSA with AES. The <see cref="IAsymmetricEncryptionProvider" />
-    ///     from <see cref="KeyPair.RsaProvider" /> is used, or a default of <see cref="HitaiAsymmetricEncryptionProvider" />
+    ///     from <see cref="Keypair.RsaProvider" /> is used, or a default of <see cref="HitaiAsymmetricEncryptionProvider" />
     ///     is used.
     /// </summary>
     public class AsymmetricEncryptionController
@@ -25,7 +25,7 @@ namespace Hitai.AsymmetricEncryption
         /// <param name="recipient"></param>
         /// <param name="data"></param>
         /// <returns></returns>
-        public static Message Encrypt(KeyPair recipient, byte[] data) {
+        public static Message Encrypt(Keypair recipient, byte[] data) {
             IAsymmetricEncryptionProvider provider = GetRsaProvider(recipient.RsaProvider);
             provider.SetKeyPair(recipient.ToPublic());
             var aes = new AesSymmetricEncryptionProvider();
@@ -47,7 +47,7 @@ namespace Hitai.AsymmetricEncryption
                 ProviderList[providerIndex]);
         }
 
-        public static byte[] Decrypt(Message m, string password, KeyPair kp) {
+        public static byte[] Decrypt(Message m, string password, Keypair kp) {
             if (m.RecipientId != kp.ShortId)
                 throw new InvalidOperationException("Keypair does not match the recipient");
             IAsymmetricEncryptionProvider provider = GetRsaProvider(kp.RsaProvider);
@@ -58,12 +58,12 @@ namespace Hitai.AsymmetricEncryption
         }
 
         public static byte[] Decrypt(Message m, string password, Keychain kc) {
-            KeyPair key = kc.Keys.FirstOrDefault(x => x.ShortId == m.RecipientId);
+            Keypair key = kc.Keys.FirstOrDefault(x => x.ShortId == m.RecipientId);
             if (key == null) throw new Exception("Recipient's key is absent from keychain");
             return Decrypt(m, password, key);
         }
 
-        public static Signature Sign(byte[] data, string password, KeyPair kp) {
+        public static Signature Sign(byte[] data, string password, Keypair kp) {
             IAsymmetricEncryptionProvider provider = GetRsaProvider(kp.RsaProvider);
             provider.SetKeyPair(kp, password);
             var signature = new Signature {Data = new byte[data.Length]};
@@ -74,18 +74,18 @@ namespace Hitai.AsymmetricEncryption
             return signature;
         }
 
-        public static Signature Sign(Message m, string password, KeyPair kp) {
+        public static Signature Sign(Message m, string password, Keypair kp) {
             return Sign(LZ4MessagePackSerializer.Serialize(m), password, kp);
         }
 
-        public static bool Verify(Signature s, KeyPair kp) {
+        public static bool Verify(Signature s, Keypair kp) {
             IAsymmetricEncryptionProvider provider = GetRsaProvider(kp.RsaProvider);
             provider.SetKeyPair(kp.ToPublic());
             return provider.VerifyData(s.Data, s.SignatureData);
         }
 
         public static bool Verify(Signature s, Keychain kc) {
-            KeyPair key = kc.Keys.FirstOrDefault(x => x.ShortId == s.AuthorId);
+            Keypair key = kc.Keys.FirstOrDefault(x => x.ShortId == s.AuthorId);
             if (key == null) throw new Exception("Recipient's key is absent from keychain");
             return Verify(s, key);
         }

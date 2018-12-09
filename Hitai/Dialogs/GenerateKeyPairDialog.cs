@@ -17,7 +17,7 @@ namespace Hitai.Dialogs
             dateTimePicker.Value = DateTime.Now.AddYears(4);
         }
 
-        public KeyPair Keypair { get; set; }
+        public Keypair Keypair { get; set; }
 
         private async void butGenerate_Click(object sender, EventArgs e) {
             // validate form

@@ -20,8 +20,8 @@
         /// <returns></returns>
         bool VerifyData(byte[] data, byte[] signature);
 
-        KeyPair GetPrivateKey(string password);
-        KeyPair GetPublicKey();
-        void SetKeyPair(KeyPair kp, string password = null);
+        Keypair GetPrivateKey(string password);
+        Keypair GetPublicKey();
+        void SetKeyPair(Keypair kp, string password = null);
     }
 }

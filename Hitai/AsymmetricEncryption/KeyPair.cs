@@ -12,7 +12,7 @@ using MessagePack;
 namespace Hitai.AsymmetricEncryption
 {
     [MessagePackObject]
-    public class KeyPair
+    public class Keypair
     {
         [IgnoreMember] public BigInteger Id => Modulus;
 
@@ -30,11 +30,11 @@ namespace Hitai.AsymmetricEncryption
             return LZ4MessagePackSerializer.Serialize(this);
         }
 
-        public static KeyPair FromMessagePack(byte[] msgPack) {
-            return LZ4MessagePackSerializer.Deserialize<KeyPair>(msgPack);
+        public static Keypair FromMessagePack(byte[] msgPack) {
+            return LZ4MessagePackSerializer.Deserialize<Keypair>(msgPack);
         }
 
-        public static async Task<KeyPair> LoadAsync(string path) {
+        public static async Task<Keypair> LoadAsync(string path) {
             // TODO: async file reading
             byte[] contents = File.ReadAllBytes(path);
             await Task.FromResult(0);
@@ -45,7 +45,7 @@ namespace Hitai.AsymmetricEncryption
                 throw new InvalidOperationException(
                     "Armor není správného typu (neobsahuje ani veřejný, ani soukromý klíč)");
             byte[] rawData = armorProvider.FromArmor(contents).rawData;
-            var keyPair = LZ4MessagePackSerializer.Deserialize<KeyPair>(rawData);
+            var keyPair = LZ4MessagePackSerializer.Deserialize<Keypair>(rawData);
             return keyPair;
         }
 
@@ -95,7 +95,7 @@ namespace Hitai.AsymmetricEncryption
         }
 
         public override bool Equals(object obj) {
-            if (obj is KeyPair keyPair)
+            if (obj is Keypair keyPair)
                 return Equals(keyPair);
             return base.Equals(obj);
         }
@@ -108,14 +108,14 @@ namespace Hitai.AsymmetricEncryption
             GC.Collect();
         }
 
-        public KeyPair ToPublic() {
-            return new KeyPair {
+        public Keypair ToPublic() {
+            return new Keypair {
                 Exponent = Exponent,
                 Modulus = Modulus
             };
         }
 
-        public bool Equals(KeyPair other) {
+        public bool Equals(Keypair other) {
             return other.Modulus.Equals(Modulus);
         }
 

@@ -26,19 +26,19 @@ namespace Hitai.AsymmetricEncryption
             return BigInteger.ModPow(new BigInteger(data), Exponent, Modulus).ToByteArray();
         }
 
-        public KeyPair GetPrivateKey(string password) {
-            var kp = new KeyPair {Exponent = Exponent, Modulus = Modulus};
+        public Keypair GetPrivateKey(string password) {
+            var kp = new Keypair {Exponent = Exponent, Modulus = Modulus};
             if (PrivateExponent == null) throw new InvalidOperationException();
             kp.SetPrivateExponentAsync(PrivateExponent.Value.ToByteArray(), password).Wait();
             return kp;
         }
 
-        public KeyPair GetPublicKey() {
-            var kp = new KeyPair {Exponent = Exponent, Modulus = Modulus};
+        public Keypair GetPublicKey() {
+            var kp = new Keypair {Exponent = Exponent, Modulus = Modulus};
             return kp;
         }
 
-        public void SetKeyPair(KeyPair kp, string password = null) {
+        public void SetKeyPair(Keypair kp, string password = null) {
             Exponent = kp.Exponent;
             Modulus = kp.Modulus;
             if (kp.IsPrivate && password == null) throw new ArgumentException("Je potřeba heslo");

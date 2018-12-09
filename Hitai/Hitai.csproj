@@ -117,7 +117,7 @@
     </Compile>
     <Compile Include="IO\BitStream.cs" />
     <Compile Include="Keychain.cs" />
-    <Compile Include="AsymmetricEncryption\KeyPair.cs" />
+    <Compile Include="AsymmetricEncryption\Keypair.cs" />
     <Compile Include="Math\PrimeGenerator.cs" />
     <Compile Include="Models\Message.cs" />
     <Compile Include="Models\Signature.cs" />

@@ -8,8 +8,8 @@ namespace Hitai
 {
     public partial class UserControlKeychain : UserControl
     {
-        private readonly Dictionary<KeyPair, ListViewItem> _keyPairToListViewItemMap =
-            new Dictionary<KeyPair, ListViewItem>();
+        private readonly Dictionary<Keypair, ListViewItem> _keyPairToListViewItemMap =
+            new Dictionary<Keypair, ListViewItem>();
 
         private Keychain _keychain;
 
@@ -17,13 +17,13 @@ namespace Hitai
             InitializeComponent();
         }
 
-        public KeyPair[] SelectedItems {
+        public Keypair[] SelectedItems {
             get {
-                IEnumerable<KeyPair> keypairs = listView.SelectedItems
+                IEnumerable<Keypair> keypairs = listView.SelectedItems
                     .Cast<ListViewItem>()
                     .Select(item => _keyPairToListViewItemMap.Keys
                         .FirstOrDefault(x => _keyPairToListViewItemMap[x] == item));
-                KeyPair[] enumeration = keypairs as KeyPair[] ?? keypairs.ToArray();
+                Keypair[] enumeration = keypairs as Keypair[] ?? keypairs.ToArray();
                 if (enumeration.Any(x => x == null))
                     throw new Exception("Could not find ListItem-respective keypair");
                 return enumeration;
@@ -38,12 +38,12 @@ namespace Hitai
             }
         }
 
-        private void Keychain_OnKeypairRemoved(KeyPair keypair) {
+        private void Keychain_OnKeypairRemoved(Keypair keypair) {
             _keyPairToListViewItemMap[keypair].Remove();
             _keyPairToListViewItemMap.Remove(keypair);
         }
 
-        private void Keychain_OnKeypairAdded(KeyPair keypair) {
+        private void Keychain_OnKeypairAdded(Keypair keypair) {
             // private? | id | name | created | expires
             var item = new ListViewItem(new[] {
                 keypair.IsPrivate.ToString(),
@@ -59,7 +59,7 @@ namespace Hitai
         private void RefreshListView() {
             _keyPairToListViewItemMap.Clear();
             listView.Items.Clear();
-            foreach (KeyPair keypair in Keychain.Keys) {
+            foreach (Keypair keypair in Keychain.Keys) {
                 // private? | id | name | created | expires
                 var item = new ListViewItem(new[] {
                     keypair.IsPrivate.ToString(),
