@@ -1,6 +1,6 @@
 ﻿using NUnit.Framework;
 
-namespace Hitai.ArmorProviders.Tests
+namespace Hitai.Test.ArmorProviders
 {
     [TestFixture]
     public class ArmorRecognizerTests

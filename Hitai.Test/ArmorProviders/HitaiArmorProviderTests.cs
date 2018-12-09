@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Text;
+using Hitai.ArmorProviders;
 using Hitai.IO;
 using NUnit.Framework;
 
-namespace Hitai.ArmorProviders.Tests
+namespace Hitai.Test.ArmorProviders
 {
     [TestFixture]
     public class HitaiArmorProviderTests

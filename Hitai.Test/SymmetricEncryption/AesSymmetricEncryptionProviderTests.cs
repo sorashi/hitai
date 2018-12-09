@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Text;
 using System.Threading.Tasks;
+using Hitai.SymmetricEncryption;
 using NUnit.Framework;
 
-namespace Hitai.SymmetricEncryption.Tests
+namespace Hitai.Test.SymmetricEncryption
 {
     [TestFixture]
     public class AesSymmetricEncryptionProviderTests

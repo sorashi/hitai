@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Numerics;
+using Hitai.AsymmetricEncryption;
 using NUnit.Framework;
 
-namespace Hitai.AsymmetricEncryption.Tests
+namespace Hitai.Test.AsymmetricEncryption
 {
     [TestFixture]
     public class HitaiAsymmetricEncryptionProviderTests
