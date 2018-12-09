@@ -29,13 +29,13 @@
             this.tabPageMain = new System.Windows.Forms.TabPage();
             this.comboBox_actions = new System.Windows.Forms.ComboBox();
             this.butProvest = new System.Windows.Forms.Button();
-            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.textBox_main = new System.Windows.Forms.TextBox();
             this.ucKeychain_mainTab = new Hitai.UserControlKeychain();
             this.tabPageKeychain = new System.Windows.Forms.TabPage();
             this.buttonDeleteKey = new System.Windows.Forms.Button();
             this.buttonGenerateNewPair = new System.Windows.Forms.Button();
             this.buttonAddPublicKey = new System.Windows.Forms.Button();
-            this.userControlKeychain1 = new Hitai.UserControlKeychain();
+            this.ucKeychain_keychainTab = new Hitai.UserControlKeychain();
             this.tabPageInsight = new System.Windows.Forms.TabPage();
             this.tabControl2 = new System.Windows.Forms.TabControl();
             this.tabPageInsightKeyGenerator = new System.Windows.Forms.TabPage();
@@ -87,7 +87,7 @@
             // 
             this.tabPageMain.Controls.Add(this.comboBox_actions);
             this.tabPageMain.Controls.Add(this.butProvest);
-            this.tabPageMain.Controls.Add(this.textBox1);
+            this.tabPageMain.Controls.Add(this.textBox_main);
             this.tabPageMain.Controls.Add(this.ucKeychain_mainTab);
             this.tabPageMain.Location = new System.Drawing.Point(4, 22);
             this.tabPageMain.Name = "tabPageMain";
@@ -127,16 +127,16 @@
             this.butProvest.UseVisualStyleBackColor = true;
             this.butProvest.Click += new System.EventHandler(this.butProvest_Click);
             // 
-            // textBox1
+            // textBox_main
             // 
-            this.textBox1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.textBox_main.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBox1.Location = new System.Drawing.Point(8, 6);
-            this.textBox1.Multiline = true;
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(449, 214);
-            this.textBox1.TabIndex = 1;
+            this.textBox_main.Location = new System.Drawing.Point(8, 6);
+            this.textBox_main.Multiline = true;
+            this.textBox_main.Name = "textBox_main";
+            this.textBox_main.Size = new System.Drawing.Size(449, 214);
+            this.textBox_main.TabIndex = 1;
             // 
             // ucKeychain_mainTab
             // 
@@ -151,7 +151,7 @@
             this.tabPageKeychain.Controls.Add(this.buttonDeleteKey);
             this.tabPageKeychain.Controls.Add(this.buttonGenerateNewPair);
             this.tabPageKeychain.Controls.Add(this.buttonAddPublicKey);
-            this.tabPageKeychain.Controls.Add(this.userControlKeychain1);
+            this.tabPageKeychain.Controls.Add(this.ucKeychain_keychainTab);
             this.tabPageKeychain.Location = new System.Drawing.Point(4, 22);
             this.tabPageKeychain.Name = "tabPageKeychain";
             this.tabPageKeychain.Padding = new System.Windows.Forms.Padding(3);
@@ -190,15 +190,15 @@
             this.buttonAddPublicKey.UseVisualStyleBackColor = true;
             this.buttonAddPublicKey.Click += new System.EventHandler(this.buttonAddPublicKey_Click);
             // 
-            // userControlKeychain1
+            // ucKeychain_keychainTab
             // 
-            this.userControlKeychain1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            this.ucKeychain_keychainTab.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.userControlKeychain1.Location = new System.Drawing.Point(0, 36);
-            this.userControlKeychain1.Name = "userControlKeychain1";
-            this.userControlKeychain1.Size = new System.Drawing.Size(465, 329);
-            this.userControlKeychain1.TabIndex = 0;
+            this.ucKeychain_keychainTab.Location = new System.Drawing.Point(0, 36);
+            this.ucKeychain_keychainTab.Name = "ucKeychain_keychainTab";
+            this.ucKeychain_keychainTab.Size = new System.Drawing.Size(465, 329);
+            this.ucKeychain_keychainTab.TabIndex = 0;
             // 
             // tabPageInsight
             // 
@@ -509,13 +509,13 @@
         private System.Windows.Forms.TabControl tabControl2;
         private System.Windows.Forms.TabPage tabPageInsightKeyGenerator;
         private System.Windows.Forms.TabPage tabPageInsightEncryption;
-        private UserControlKeychain userControlKeychain1;
+        private UserControlKeychain ucKeychain_keychainTab;
         private System.Windows.Forms.Button buttonDeleteKey;
         private System.Windows.Forms.Button buttonGenerateNewPair;
         private System.Windows.Forms.Button buttonAddPublicKey;
         private System.Windows.Forms.ComboBox comboBox_actions;
         private System.Windows.Forms.Button butProvest;
-        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.TextBox textBox_main;
         private UserControlKeychain ucKeychain_mainTab;
         private System.Windows.Forms.Label label_e;
         private System.Windows.Forms.TextBox textBox_e;

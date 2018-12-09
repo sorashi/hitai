@@ -40,12 +40,12 @@ namespace Hitai
 
         private async void FormMain_Load(object sender, EventArgs e) {
             Keychain = await Keychain.GetInstance();
-            userControlKeychain1.Keychain = Keychain;
+            ucKeychain_keychainTab.Keychain = Keychain;
             ucKeychain_mainTab.Keychain = Keychain;
         }
 
         private async void buttonDeleteKey_Click(object sender, EventArgs e) {
-            foreach (Keypair keypair in userControlKeychain1.SelectedItems)
+            foreach (Keypair keypair in ucKeychain_keychainTab.SelectedItems)
                 await Keychain.RemoveKeyPair(keypair);
         }
 
@@ -58,7 +58,7 @@ namespace Hitai
         private void butProvest_Click(object sender, EventArgs e) {
             // TODO allow file import
             // todo make async
-            byte[] content = Encoding.UTF8.GetBytes(textBox1.Text);
+            byte[] content = Encoding.UTF8.GetBytes(textBox_main.Text);
             Keypair chosenKeypair = ucKeychain_mainTab.SelectedItems.FirstOrDefault();
             IArmorProvider armorProvider = new HitaiArmorProvider();
             Message message;
@@ -105,7 +105,7 @@ namespace Hitai
                         passwordDialog.Password,
                         recipient);
                     string clearText = Encoding.UTF8.GetString(data);
-                    textBox1.Text = clearText;
+                    textBox_main.Text = clearText;
                     break;
                 case 2: // podepsat
                     if (!chosenKeypair.IsPrivate) {
@@ -117,7 +117,7 @@ namespace Hitai
                     if (passwordDialog.ShowDialog() != DialogResult.OK) return;
                     // todo catch wrong password
                     signature = AsymmetricEncryptionController.Sign(
-                        Encoding.UTF8.GetBytes(textBox1.Text),
+                        Encoding.UTF8.GetBytes(textBox_main.Text),
                         passwordDialog.Password, chosenKeypair);
                     Clipboard.SetText(Encoding.UTF8.GetString(armorProvider.ToArmor(
                         LZ4MessagePackSerializer.Serialize(signature),
@@ -199,7 +199,7 @@ namespace Hitai
                             passwordDialog.Password, Keychain));
                     MessageBox.Show(
                         "Podpis byl úspěšně ověřen a dešifrovaná zpráva bude zobrazena.");
-                    textBox1.Text = result;
+                    textBox_main.Text = result;
                     break;
                 default:
                     throw new NotImplementedException();
