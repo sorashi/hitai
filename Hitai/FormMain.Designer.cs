@@ -137,6 +137,7 @@
             this.textBox_main.Name = "textBox_main";
             this.textBox_main.Size = new System.Drawing.Size(449, 214);
             this.textBox_main.TabIndex = 1;
+            this.textBox_main.KeyDown += new System.Windows.Forms.KeyEventHandler(this.TextBox_main_KeyDown);
             // 
             // ucKeychain_mainTab
             // 

@@ -354,5 +354,13 @@ namespace Hitai
         }
 
         #endregion
+
+        private void TextBox_main_KeyDown(object sender, KeyEventArgs e) {
+            if (sender == null) return;
+            if (sender is TextBox t && e.Control && e.KeyCode == Keys.A) {
+                e.SuppressKeyPress = true;
+                t.SelectAll();
+            }
+        }
     }
 }
