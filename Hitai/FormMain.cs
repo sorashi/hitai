@@ -11,6 +11,7 @@ using Hitai.AsymmetricEncryption;
 using Hitai.Dialogs;
 using Hitai.Math;
 using Hitai.Models;
+using Hitai.Properties;
 using MessagePack;
 using Message = Hitai.Models.Message;
 
@@ -20,6 +21,7 @@ namespace Hitai
     {
         public FormMain() {
             InitializeComponent();
+            Icon = Resources.logo;
             comboBox_actions.SelectedIndex = 0;
             label_errors.Text = "";
             NewPrimes();
