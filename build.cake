@@ -93,8 +93,8 @@ Task("NuGet-Pack")
             BasePath = buildDir,
             OutputDirectory = "./nuget",
             Files = new [] {
-                new NuSpecContent { Source = "Hitai.exe", Target = "lib/net452" },
-                new NuSpecContent { Source = "LICENSE.txt", Target = "Content/Licenses/LICENSE.txt"}
+                new NuSpecContent { Source = "Hitai.exe", Target = "lib/net45" },
+                new NuSpecContent { Source = "LICENSE.txt", Target = "lib/net45/LICENSE.txt"}
             },
             Dependencies = GetPackageReferences("./Hitai")
                 .Where(x => !x.IsDevelopmentDependency)
