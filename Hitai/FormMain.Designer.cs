@@ -57,6 +57,7 @@
             this.label1 = new System.Windows.Forms.Label();
             this.numeric_q = new System.Windows.Forms.NumericUpDown();
             this.numeric_p = new System.Windows.Forms.NumericUpDown();
+            this.but_exportPublic = new System.Windows.Forms.Button();
             this.tabControl1.SuspendLayout();
             this.tabPageMain.SuspendLayout();
             this.tabPageKeychain.SuspendLayout();
@@ -144,6 +145,7 @@
             // 
             // tabPageKeychain
             // 
+            this.tabPageKeychain.Controls.Add(this.but_exportPublic);
             this.tabPageKeychain.Controls.Add(this.buttonDeleteKey);
             this.tabPageKeychain.Controls.Add(this.buttonGenerateNewPair);
             this.tabPageKeychain.Controls.Add(this.buttonAddPublicKey);
@@ -437,6 +439,16 @@
             0});
             this.numeric_p.ValueChanged += new System.EventHandler(this.Numeric_p_ValueChanged);
             // 
+            // but_exportPublic
+            // 
+            this.but_exportPublic.Location = new System.Drawing.Point(334, 7);
+            this.but_exportPublic.Name = "but_exportPublic";
+            this.but_exportPublic.Size = new System.Drawing.Size(117, 23);
+            this.but_exportPublic.TabIndex = 4;
+            this.but_exportPublic.Text = "Exportovat veřejný";
+            this.but_exportPublic.UseVisualStyleBackColor = true;
+            this.but_exportPublic.Click += new System.EventHandler(this.but_exportPublic_Click);
+            // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -495,6 +507,7 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.NumericUpDown numeric_q;
         private System.Windows.Forms.NumericUpDown numeric_p;
+        private System.Windows.Forms.Button but_exportPublic;
     }
 }
 

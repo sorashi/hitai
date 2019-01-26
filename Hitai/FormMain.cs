@@ -396,5 +396,18 @@ namespace Hitai
                 t.SelectAll();
             }
         }
+
+        private void but_exportPublic_Click(object sender, EventArgs e) {
+            Keypair chosenKeypair = ucKeychain_keychainTab.SelectedItems.FirstOrDefault();
+            if (chosenKeypair == null) {
+                MessageBox.Show("Vyberte nejdříve klíčový pár.");
+                return;
+            }
+
+            IArmorProvider armor = new HitaiArmorProvider();
+            var result = armor.ToArmor(chosenKeypair.ToPublic().ToMessagePack(), ArmorType.PublicKey);
+            Clipboard.SetText(Encoding.UTF8.GetString(result));
+            MessageBox.Show("Výsledek byl zkopírován do schránky.");
+        }
     }
 }
