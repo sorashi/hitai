@@ -111,7 +111,12 @@ namespace Hitai.AsymmetricEncryption
         public Keypair ToPublic() {
             return new Keypair {
                 Exponent = Exponent,
-                Modulus = Modulus
+                Modulus = Modulus,
+                CreationTime = CreationTime,
+                Expires = Expires,
+                UserId = UserId,
+                LastEdited = LastEdited,
+                RsaProvider = RsaProvider
             };
         }
 
