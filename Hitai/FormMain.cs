@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Numerics;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -102,10 +103,19 @@ namespace Hitai
 
                     passwordDialog = new PasswordInputDialog("Dešifrování");
                     if (passwordDialog.ShowDialog() != DialogResult.OK) return;
-                    // todo catch wrong password
-                    byte[] data = AsymmetricEncryptionController.Decrypt(message,
-                        passwordDialog.Password,
-                        recipient);
+                    byte[] data;
+                    try {
+                        data = AsymmetricEncryptionController.Decrypt(message,
+                            passwordDialog.Password,
+                            recipient);
+                    }
+                    catch (Exception ex) {
+                        while (ex is AggregateException) ex = ex.InnerException;
+                        if (!(ex is CryptographicException)) throw;
+                        MessageBox.Show("Nesprávné heslo.");
+                        return;
+                    }
+
                     string clearText = Encoding.UTF8.GetString(data);
                     textBox_main.Text = clearText;
                     break;
@@ -117,10 +127,18 @@ namespace Hitai
 
                     passwordDialog = new PasswordInputDialog("Podepisování");
                     if (passwordDialog.ShowDialog() != DialogResult.OK) return;
-                    // todo catch wrong password
-                    signature = AsymmetricEncryptionController.Sign(
-                        Encoding.UTF8.GetBytes(textBox_main.Text),
-                        passwordDialog.Password, chosenKeypair);
+                    try {
+
+                        signature = AsymmetricEncryptionController.Sign(
+                            Encoding.UTF8.GetBytes(textBox_main.Text),
+                            passwordDialog.Password, chosenKeypair);
+                    }
+                    catch (Exception ex) {
+                        while (ex is AggregateException) ex = ex.InnerException;
+                        if (!(ex is CryptographicException)) throw;
+                        MessageBox.Show("Nesprávné heslo.");
+                        return;
+                    }
                     Clipboard.SetText(Encoding.UTF8.GetString(armorProvider.ToArmor(
                         LZ4MessagePackSerializer.Serialize(signature),
                         ArmorType.Signature)));
@@ -160,9 +178,16 @@ namespace Hitai
                     message = AsymmetricEncryptionController.Encrypt(chosenKeypair, content);
                     passwordDialog = new PasswordInputDialog("Podepisování");
                     if (passwordDialog.ShowDialog() != DialogResult.OK) return;
-                    // todo catch wrong password
-                    signature = AsymmetricEncryptionController.Sign(message,
-                        passwordDialog.Password, chooseKeyDialog.ChosenKeypair);
+                    try {
+                        signature = AsymmetricEncryptionController.Sign(message,
+                            passwordDialog.Password, chooseKeyDialog.ChosenKeypair);
+                    }
+                    catch (Exception ex) {
+                        while (ex is AggregateException) ex = ex.InnerException;
+                        if (!(ex is CryptographicException)) throw;
+                        MessageBox.Show("Nesprávné heslo.");
+                        return;
+                    }
                     result = Encoding.UTF8.GetString(armorProvider.ToArmor(
                         LZ4MessagePackSerializer.Serialize(signature),
                         ArmorType.SignedMessage));
@@ -195,10 +220,17 @@ namespace Hitai
 
                     passwordDialog = new PasswordInputDialog("Dešifrování");
                     if (passwordDialog.ShowDialog() != DialogResult.OK) return;
-                    // todo catch wrong password
-                    result = Encoding.UTF8.GetString(
-                        AsymmetricEncryptionController.Decrypt(signature.GetMessage(),
-                            passwordDialog.Password, Keychain));
+                    try {
+                        result = Encoding.UTF8.GetString(
+                            AsymmetricEncryptionController.Decrypt(signature.GetMessage(),
+                                passwordDialog.Password, Keychain));
+                    }
+                    catch (Exception ex) {
+                        while (ex is AggregateException) ex = ex.InnerException;
+                        if (!(ex is CryptographicException)) throw;
+                        MessageBox.Show("Nesprávné heslo.");
+                        return;
+                    }
                     MessageBox.Show(
                         "Podpis byl úspěšně ověřen a dešifrovaná zpráva bude zobrazena.");
                     textBox_main.Text = result;
