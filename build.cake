@@ -1,7 +1,9 @@
 #tool nuget:?package=NUnit.ConsoleRunner&version=3.4.0
 #tool "nuget:?package=GitVersion.CommandLine"
+#tool "Squirrel.Windows"
 #addin "nuget:?package=NuGet.Core"
 #addin "Cake.ExtendedNuGet"
+#addin Cake.Squirrel
 
 ///////////////////////////////////////////////////////////////////////////////
 // ARGUMENTS
@@ -105,6 +107,15 @@ Task("NuGet-Pack")
                 .ToList()
         };
         NuGetPack(settings);
+    });
+Task("Squirrel-Releasify")
+    .IsDependentOn("NuGet-Pack")
+    .Does(() => {
+        // reference https://github.com/cake-contrib/Cake.Squirrel
+        var settings = new SquirrelSettings();
+        settings.NoMsi = true;
+
+        Squirrel(nugetResultPath, settings);
     });
 Task("Default")
     .IsDependentOn("NuGet-Pack")

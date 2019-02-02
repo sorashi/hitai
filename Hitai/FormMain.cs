@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Numerics;
 using System.Security.Cryptography;
@@ -15,6 +17,7 @@ using Hitai.Models;
 using Hitai.Properties;
 using MessagePack;
 using Message = Hitai.Models.Message;
+using Squirrel;
 
 namespace Hitai
 {
@@ -42,6 +45,25 @@ namespace Hitai
         }
 
         private async void FormMain_Load(object sender, EventArgs e) {
+#if !DEBUG
+            using (var mgr = new UpdateManager("http://prazak.xf.cz/projects/hitai")) {
+                ReleaseEntry result = null;
+                try {
+                    result = await mgr.UpdateApp();
+                }
+                catch (Exception exception) {
+                    MessageBox.Show(
+                        "Nepodařilo se zkontrolovat novou verzi (buď chybí připojení k internetu, nebo tato verze již není podporována). " +
+                        "Pokud není Hitai aktuální, nemůže zajistit bezpečnost.", "Upozornění", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                }
+                if (result != null) {
+                    MessageBox.Show(
+                        $"Došlo k aktualizaci na novou verzi: {result.Version}. Nyní bude Hitai restartován.", "Aktualizace", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    Process.Start(Path.Combine(mgr.RootAppDirectory, "Hitai.exe"));
+                    Application.Exit();
+                }
+            }
+#endif
             Keychain = await Keychain.GetInstance();
             ucKeychain_keychainTab.Keychain = Keychain;
             ucKeychain_mainTab.Keychain = Keychain;
