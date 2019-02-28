@@ -32,6 +32,7 @@
             this.textBox_main = new System.Windows.Forms.TextBox();
             this.ucKeychain_mainTab = new Hitai.UserControlKeychain();
             this.tabPageKeychain = new System.Windows.Forms.TabPage();
+            this.but_exportPublic = new System.Windows.Forms.Button();
             this.buttonDeleteKey = new System.Windows.Forms.Button();
             this.buttonGenerateNewPair = new System.Windows.Forms.Button();
             this.buttonAddPublicKey = new System.Windows.Forms.Button();
@@ -57,7 +58,6 @@
             this.label1 = new System.Windows.Forms.Label();
             this.numeric_q = new System.Windows.Forms.NumericUpDown();
             this.numeric_p = new System.Windows.Forms.NumericUpDown();
-            this.but_exportPublic = new System.Windows.Forms.Button();
             this.tabControl1.SuspendLayout();
             this.tabPageMain.SuspendLayout();
             this.tabPageKeychain.SuspendLayout();
@@ -106,7 +106,7 @@
             "Ověřit",
             "Šifrovat a podepsat",
             "Dešifrovat a ověřit"});
-            this.comboBox_actions.Location = new System.Drawing.Point(8, 228);
+            this.comboBox_actions.Location = new System.Drawing.Point(8, 226);
             this.comboBox_actions.Name = "comboBox_actions";
             this.comboBox_actions.Size = new System.Drawing.Size(368, 21);
             this.comboBox_actions.TabIndex = 4;
@@ -115,7 +115,7 @@
             // butProvest
             // 
             this.butProvest.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.butProvest.Location = new System.Drawing.Point(382, 226);
+            this.butProvest.Location = new System.Drawing.Point(382, 224);
             this.butProvest.Name = "butProvest";
             this.butProvest.Size = new System.Drawing.Size(75, 23);
             this.butProvest.TabIndex = 2;
@@ -128,19 +128,19 @@
             this.textBox_main.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.textBox_main.Location = new System.Drawing.Point(8, 6);
+            this.textBox_main.Location = new System.Drawing.Point(0, 0);
             this.textBox_main.Multiline = true;
             this.textBox_main.Name = "textBox_main";
-            this.textBox_main.Size = new System.Drawing.Size(449, 214);
+            this.textBox_main.Size = new System.Drawing.Size(459, 218);
             this.textBox_main.TabIndex = 1;
             this.textBox_main.KeyDown += new System.Windows.Forms.KeyEventHandler(this.TextBox_main_KeyDown);
             // 
             // ucKeychain_mainTab
             // 
             this.ucKeychain_mainTab.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.ucKeychain_mainTab.Location = new System.Drawing.Point(3, 286);
+            this.ucKeychain_mainTab.Location = new System.Drawing.Point(3, 253);
             this.ucKeychain_mainTab.Name = "ucKeychain_mainTab";
-            this.ucKeychain_mainTab.Size = new System.Drawing.Size(453, 107);
+            this.ucKeychain_mainTab.Size = new System.Drawing.Size(453, 140);
             this.ucKeychain_mainTab.TabIndex = 0;
             // 
             // tabPageKeychain
@@ -157,6 +157,16 @@
             this.tabPageKeychain.TabIndex = 1;
             this.tabPageKeychain.Text = "Klíčenka";
             this.tabPageKeychain.UseVisualStyleBackColor = true;
+            // 
+            // but_exportPublic
+            // 
+            this.but_exportPublic.Location = new System.Drawing.Point(334, 7);
+            this.but_exportPublic.Name = "but_exportPublic";
+            this.but_exportPublic.Size = new System.Drawing.Size(117, 23);
+            this.but_exportPublic.TabIndex = 4;
+            this.but_exportPublic.Text = "Exportovat veřejný";
+            this.but_exportPublic.UseVisualStyleBackColor = true;
+            this.but_exportPublic.Click += new System.EventHandler(this.but_exportPublic_Click);
             // 
             // buttonDeleteKey
             // 
@@ -195,7 +205,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.ucKeychain_keychainTab.Location = new System.Drawing.Point(0, 36);
             this.ucKeychain_keychainTab.Name = "ucKeychain_keychainTab";
-            this.ucKeychain_keychainTab.Size = new System.Drawing.Size(465, 329);
+            this.ucKeychain_keychainTab.Size = new System.Drawing.Size(459, 360);
             this.ucKeychain_keychainTab.TabIndex = 0;
             // 
             // tabPageInsight
@@ -229,7 +239,7 @@
             // 
             // textBox_backM
             // 
-            this.textBox_backM.Location = new System.Drawing.Point(263, 197);
+            this.textBox_backM.Location = new System.Drawing.Point(249, 196);
             this.textBox_backM.Name = "textBox_backM";
             this.textBox_backM.ReadOnly = true;
             this.textBox_backM.Size = new System.Drawing.Size(120, 20);
@@ -238,7 +248,7 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(260, 181);
+            this.label6.Location = new System.Drawing.Point(246, 180);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(177, 13);
             this.label6.TabIndex = 40;
@@ -246,7 +256,7 @@
             // 
             // textBox_c
             // 
-            this.textBox_c.Location = new System.Drawing.Point(145, 197);
+            this.textBox_c.Location = new System.Drawing.Point(134, 195);
             this.textBox_c.Name = "textBox_c";
             this.textBox_c.ReadOnly = true;
             this.textBox_c.Size = new System.Drawing.Size(109, 20);
@@ -255,7 +265,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(150, 181);
+            this.label5.Location = new System.Drawing.Point(131, 180);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(106, 13);
             this.label5.TabIndex = 38;
@@ -264,7 +274,7 @@
             // label_m
             // 
             this.label_m.AutoSize = true;
-            this.label_m.Location = new System.Drawing.Point(11, 181);
+            this.label_m.Location = new System.Drawing.Point(5, 180);
             this.label_m.Name = "label_m";
             this.label_m.Size = new System.Drawing.Size(101, 13);
             this.label_m.TabIndex = 37;
@@ -272,7 +282,7 @@
             // 
             // numeric_m
             // 
-            this.numeric_m.Location = new System.Drawing.Point(11, 197);
+            this.numeric_m.Location = new System.Drawing.Point(8, 196);
             this.numeric_m.Minimum = new decimal(new int[] {
             2,
             0,
@@ -291,7 +301,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(342, 85);
+            this.label4.Location = new System.Drawing.Point(337, 77);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(70, 13);
             this.label4.TabIndex = 35;
@@ -299,7 +309,7 @@
             // 
             // textBox_k
             // 
-            this.textBox_k.Location = new System.Drawing.Point(344, 104);
+            this.textBox_k.Location = new System.Drawing.Point(340, 93);
             this.textBox_k.Name = "textBox_k";
             this.textBox_k.ReadOnly = true;
             this.textBox_k.Size = new System.Drawing.Size(100, 20);
@@ -307,7 +317,7 @@
             // 
             // textBox_modulus
             // 
-            this.textBox_modulus.Location = new System.Drawing.Point(11, 143);
+            this.textBox_modulus.Location = new System.Drawing.Point(8, 132);
             this.textBox_modulus.Name = "textBox_modulus";
             this.textBox_modulus.ReadOnly = true;
             this.textBox_modulus.Size = new System.Drawing.Size(327, 20);
@@ -316,7 +326,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(11, 127);
+            this.label3.Location = new System.Drawing.Point(5, 116);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(58, 13);
             this.label3.TabIndex = 32;
@@ -325,7 +335,7 @@
             // label_d
             // 
             this.label_d.AutoSize = true;
-            this.label_d.Location = new System.Drawing.Point(175, 85);
+            this.label_d.Location = new System.Drawing.Point(171, 77);
             this.label_d.Name = "label_d";
             this.label_d.Size = new System.Drawing.Size(112, 13);
             this.label_d.TabIndex = 31;
@@ -333,7 +343,7 @@
             // 
             // textBox_d
             // 
-            this.textBox_d.Location = new System.Drawing.Point(178, 104);
+            this.textBox_d.Location = new System.Drawing.Point(174, 93);
             this.textBox_d.Name = "textBox_d";
             this.textBox_d.ReadOnly = true;
             this.textBox_d.Size = new System.Drawing.Size(160, 20);
@@ -342,7 +352,7 @@
             // label_e
             // 
             this.label_e.AutoSize = true;
-            this.label_e.Location = new System.Drawing.Point(11, 85);
+            this.label_e.Location = new System.Drawing.Point(5, 77);
             this.label_e.Name = "label_e";
             this.label_e.Size = new System.Drawing.Size(100, 13);
             this.label_e.TabIndex = 29;
@@ -350,7 +360,7 @@
             // 
             // textBox_e
             // 
-            this.textBox_e.Location = new System.Drawing.Point(11, 104);
+            this.textBox_e.Location = new System.Drawing.Point(8, 93);
             this.textBox_e.Name = "textBox_e";
             this.textBox_e.ReadOnly = true;
             this.textBox_e.Size = new System.Drawing.Size(160, 20);
@@ -359,7 +369,7 @@
             // label_errors
             // 
             this.label_errors.ForeColor = System.Drawing.Color.Maroon;
-            this.label_errors.Location = new System.Drawing.Point(260, 11);
+            this.label_errors.Location = new System.Drawing.Point(260, 9);
             this.label_errors.Name = "label_errors";
             this.label_errors.Size = new System.Drawing.Size(193, 65);
             this.label_errors.TabIndex = 27;
@@ -367,7 +377,7 @@
             // 
             // but_newPrimes
             // 
-            this.but_newPrimes.Location = new System.Drawing.Point(11, 53);
+            this.but_newPrimes.Location = new System.Drawing.Point(8, 51);
             this.but_newPrimes.Name = "but_newPrimes";
             this.but_newPrimes.Size = new System.Drawing.Size(105, 23);
             this.but_newPrimes.TabIndex = 26;
@@ -378,7 +388,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(131, 11);
+            this.label2.Location = new System.Drawing.Point(131, 9);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(62, 13);
             this.label2.TabIndex = 25;
@@ -387,7 +397,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(8, 11);
+            this.label1.Location = new System.Drawing.Point(5, 9);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(61, 13);
             this.label1.TabIndex = 24;
@@ -395,7 +405,7 @@
             // 
             // numeric_q
             // 
-            this.numeric_q.Location = new System.Drawing.Point(134, 27);
+            this.numeric_q.Location = new System.Drawing.Point(134, 25);
             this.numeric_q.Maximum = new decimal(new int[] {
             100000,
             0,
@@ -418,7 +428,7 @@
             // 
             // numeric_p
             // 
-            this.numeric_p.Location = new System.Drawing.Point(8, 27);
+            this.numeric_p.Location = new System.Drawing.Point(8, 25);
             this.numeric_p.Maximum = new decimal(new int[] {
             100000,
             0,
@@ -438,16 +448,6 @@
             0,
             0});
             this.numeric_p.ValueChanged += new System.EventHandler(this.Numeric_p_ValueChanged);
-            // 
-            // but_exportPublic
-            // 
-            this.but_exportPublic.Location = new System.Drawing.Point(334, 7);
-            this.but_exportPublic.Name = "but_exportPublic";
-            this.but_exportPublic.Size = new System.Drawing.Size(117, 23);
-            this.but_exportPublic.TabIndex = 4;
-            this.but_exportPublic.Text = "Exportovat veřejný";
-            this.but_exportPublic.UseVisualStyleBackColor = true;
-            this.but_exportPublic.Click += new System.EventHandler(this.but_exportPublic_Click);
             // 
             // FormMain
             // 
