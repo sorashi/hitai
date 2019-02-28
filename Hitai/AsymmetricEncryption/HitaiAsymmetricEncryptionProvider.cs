@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Numerics;
 using System.Security.Cryptography;
+using System.Threading;
 using Hitai.Math;
 
 namespace Hitai.AsymmetricEncryption
@@ -58,8 +59,9 @@ namespace Hitai.AsymmetricEncryption
             return Encrypt(signature).SequenceEqual(hash);
         }
 
-        public void GenerateNewKeypair() {
-            BigInteger[] primes = PrimeGenerator.GetTwoProbablePrimesParallel(512);
+        public void GenerateNewKeypair(CancellationToken ct = default) {
+            BigInteger[] primes = PrimeGenerator.GetTwoProbablePrimesParallel(512, ct: ct);
+            if(primes == null || primes.Length <= 0) throw new OperationCanceledException();
             BigInteger p = primes[0];
             BigInteger q = primes[1];
             BigInteger phiN = (p - 1) * (q - 1);

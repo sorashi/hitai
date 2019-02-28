@@ -106,7 +106,7 @@ namespace Hitai.Math
         ///     greater or equal to 2
         /// </param>
         /// <returns></returns>
-        public static BigInteger[] GetTwoProbablePrimesParallel(int bits, int n = 0) {
+        public static BigInteger[] GetTwoProbablePrimesParallel(int bits, int n = 0, CancellationToken ct = default) {
             if (n == 0)
                 n = Environment.ProcessorCount;
             if (n < 2)
@@ -119,12 +119,14 @@ namespace Hitai.Math
             foreach (Thread thread in threads)
                 thread.Start();
             while (true)
-                if (results.Count >= 2) {
+                if (results.Count >= 2 || ct.IsCancellationRequested) {
                     foreach (Thread thread in threads)
                         thread.Abort();
                     break;
                 }
 
+            if (ct.IsCancellationRequested)
+                return results.Any() ? results.ToArray() : new BigInteger[0];
             return results.Distinct().Take(2).ToArray();
         }
 
