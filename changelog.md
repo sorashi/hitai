@@ -7,6 +7,13 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 ### Added
 - readme
 - insight now shows a formula/hint when hovering over a field label
+### Fixed
+- `EnsurePositiveModulus` is now called when generating a new keypair using
+`SystemAsymmetricEncryptionProvider`. dbeeeafa31c4ee943e872eaaa987a3698717be79
+- `Keypair` now holds all the private information essential for
+`SystemAsymmetricEncryptionProvider`, i.e. `P`, `Q`, `DP`, `DQ` and `InverseQ`
+were added. `SystemAsymmetricEncryptionProvider` was marked `PublicOnly` without
+these properties and so was unable to decipher data. 00a656477ba05e7e37e10f977ee01aa32fde0a75
 
 ## [0.1.1] - 2019-03-21
 ### Fixed
