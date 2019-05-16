@@ -55,7 +55,9 @@ namespace Hitai.Dialogs
             await Task.Factory.StartNew(() => {
                 switch (selectedItem) {
                     case 0: // .NET RSA
-                        _aep = new SystemAsymmetricEncryptionProvider();
+                        var sym = new SystemAsymmetricEncryptionProvider();
+                        sym.EnsurePositiveModulus();
+                        _aep = sym;
                         break;
                     case 1: // Hitai RSA
                         var hiaep = new HitaiAsymmetricEncryptionProvider();
