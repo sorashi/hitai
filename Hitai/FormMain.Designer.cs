@@ -38,16 +38,17 @@
             this.buttonAddPublicKey = new System.Windows.Forms.Button();
             this.ucKeychain_keychainTab = new Hitai.UserControlKeychain();
             this.tabPageInsight = new System.Windows.Forms.TabPage();
+            this.pictureBox_formula = new System.Windows.Forms.PictureBox();
             this.textBox_backM = new System.Windows.Forms.TextBox();
-            this.label6 = new System.Windows.Forms.Label();
+            this.label_mback = new System.Windows.Forms.Label();
             this.textBox_c = new System.Windows.Forms.TextBox();
-            this.label5 = new System.Windows.Forms.Label();
+            this.label_c = new System.Windows.Forms.Label();
             this.label_m = new System.Windows.Forms.Label();
             this.numeric_m = new System.Windows.Forms.NumericUpDown();
             this.label4 = new System.Windows.Forms.Label();
             this.textBox_k = new System.Windows.Forms.TextBox();
             this.textBox_modulus = new System.Windows.Forms.TextBox();
-            this.label3 = new System.Windows.Forms.Label();
+            this.label_n = new System.Windows.Forms.Label();
             this.label_d = new System.Windows.Forms.Label();
             this.textBox_d = new System.Windows.Forms.TextBox();
             this.label_e = new System.Windows.Forms.Label();
@@ -62,6 +63,7 @@
             this.tabPageMain.SuspendLayout();
             this.tabPageKeychain.SuspendLayout();
             this.tabPageInsight.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox_formula)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numeric_m)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numeric_q)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numeric_p)).BeginInit();
@@ -210,16 +212,17 @@
             // 
             // tabPageInsight
             // 
+            this.tabPageInsight.Controls.Add(this.pictureBox_formula);
             this.tabPageInsight.Controls.Add(this.textBox_backM);
-            this.tabPageInsight.Controls.Add(this.label6);
+            this.tabPageInsight.Controls.Add(this.label_mback);
             this.tabPageInsight.Controls.Add(this.textBox_c);
-            this.tabPageInsight.Controls.Add(this.label5);
+            this.tabPageInsight.Controls.Add(this.label_c);
             this.tabPageInsight.Controls.Add(this.label_m);
             this.tabPageInsight.Controls.Add(this.numeric_m);
             this.tabPageInsight.Controls.Add(this.label4);
             this.tabPageInsight.Controls.Add(this.textBox_k);
             this.tabPageInsight.Controls.Add(this.textBox_modulus);
-            this.tabPageInsight.Controls.Add(this.label3);
+            this.tabPageInsight.Controls.Add(this.label_n);
             this.tabPageInsight.Controls.Add(this.label_d);
             this.tabPageInsight.Controls.Add(this.textBox_d);
             this.tabPageInsight.Controls.Add(this.label_e);
@@ -237,6 +240,15 @@
             this.tabPageInsight.Text = "Vhled";
             this.tabPageInsight.UseVisualStyleBackColor = true;
             // 
+            // pictureBox_formula
+            // 
+            this.pictureBox_formula.Location = new System.Drawing.Point(101, 229);
+            this.pictureBox_formula.Name = "pictureBox_formula";
+            this.pictureBox_formula.Size = new System.Drawing.Size(239, 76);
+            this.pictureBox_formula.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pictureBox_formula.TabIndex = 42;
+            this.pictureBox_formula.TabStop = false;
+            // 
             // textBox_backM
             // 
             this.textBox_backM.Location = new System.Drawing.Point(249, 196);
@@ -245,14 +257,16 @@
             this.textBox_backM.Size = new System.Drawing.Size(120, 20);
             this.textBox_backM.TabIndex = 41;
             // 
-            // label6
+            // label_mback
             // 
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(246, 180);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(177, 13);
-            this.label6.TabIndex = 40;
-            this.label6.Text = "Zpětně vypočítané M = C^D mod N";
+            this.label_mback.AutoSize = true;
+            this.label_mback.Location = new System.Drawing.Point(246, 180);
+            this.label_mback.Name = "label_mback";
+            this.label_mback.Size = new System.Drawing.Size(110, 13);
+            this.label_mback.TabIndex = 40;
+            this.label_mback.Text = "Zpětně vypočítané M";
+            this.label_mback.MouseLeave += new System.EventHandler(this.Label_mback_MouseLeave);
+            this.label_mback.MouseHover += new System.EventHandler(this.Label_mback_MouseHover);
             // 
             // textBox_c
             // 
@@ -262,14 +276,16 @@
             this.textBox_c.Size = new System.Drawing.Size(109, 20);
             this.textBox_c.TabIndex = 39;
             // 
-            // label5
+            // label_c
             // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(131, 180);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(106, 13);
-            this.label5.TabIndex = 38;
-            this.label5.Text = "Šifra C = M^E mod N";
+            this.label_c.AutoSize = true;
+            this.label_c.Location = new System.Drawing.Point(131, 180);
+            this.label_c.Name = "label_c";
+            this.label_c.Size = new System.Drawing.Size(38, 13);
+            this.label_c.TabIndex = 38;
+            this.label_c.Text = "Šifra C";
+            this.label_c.MouseLeave += new System.EventHandler(this.Label_c_MouseLeave);
+            this.label_c.MouseHover += new System.EventHandler(this.Label_c_MouseHover);
             // 
             // label_m
             // 
@@ -323,14 +339,16 @@
             this.textBox_modulus.Size = new System.Drawing.Size(327, 20);
             this.textBox_modulus.TabIndex = 33;
             // 
-            // label3
+            // label_n
             // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(5, 116);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(58, 13);
-            this.label3.TabIndex = 32;
-            this.label3.Text = "Modulus N";
+            this.label_n.AutoSize = true;
+            this.label_n.Location = new System.Drawing.Point(5, 116);
+            this.label_n.Name = "label_n";
+            this.label_n.Size = new System.Drawing.Size(58, 13);
+            this.label_n.TabIndex = 32;
+            this.label_n.Text = "Modulus N";
+            this.label_n.MouseLeave += new System.EventHandler(this.Label_n_MouseLeave);
+            this.label_n.MouseHover += new System.EventHandler(this.Label_n_MouseHover);
             // 
             // label_d
             // 
@@ -340,6 +358,8 @@
             this.label_d.Size = new System.Drawing.Size(112, 13);
             this.label_d.TabIndex = 31;
             this.label_d.Text = "Soukromý exponent D";
+            this.label_d.MouseLeave += new System.EventHandler(this.Label_d_MouseLeave);
+            this.label_d.MouseHover += new System.EventHandler(this.Label_d_MouseHover);
             // 
             // textBox_d
             // 
@@ -357,6 +377,8 @@
             this.label_e.Size = new System.Drawing.Size(100, 13);
             this.label_e.TabIndex = 29;
             this.label_e.Text = "Veřejný exponent E";
+            this.label_e.MouseLeave += new System.EventHandler(this.Label_e_MouseLeave);
+            this.label_e.MouseHover += new System.EventHandler(this.Label_e_MouseHover);
             // 
             // textBox_e
             // 
@@ -466,6 +488,7 @@
             this.tabPageKeychain.ResumeLayout(false);
             this.tabPageInsight.ResumeLayout(false);
             this.tabPageInsight.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox_formula)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numeric_m)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numeric_q)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numeric_p)).EndInit();
@@ -488,15 +511,15 @@
         private System.Windows.Forms.TextBox textBox_main;
         private UserControlKeychain ucKeychain_mainTab;
         private System.Windows.Forms.TextBox textBox_backM;
-        private System.Windows.Forms.Label label6;
+        private System.Windows.Forms.Label label_mback;
         private System.Windows.Forms.TextBox textBox_c;
-        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.Label label_c;
         private System.Windows.Forms.Label label_m;
         private System.Windows.Forms.NumericUpDown numeric_m;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.TextBox textBox_k;
         private System.Windows.Forms.TextBox textBox_modulus;
-        private System.Windows.Forms.Label label3;
+        private System.Windows.Forms.Label label_n;
         private System.Windows.Forms.Label label_d;
         private System.Windows.Forms.TextBox textBox_d;
         private System.Windows.Forms.Label label_e;
@@ -508,6 +531,7 @@
         private System.Windows.Forms.NumericUpDown numeric_q;
         private System.Windows.Forms.NumericUpDown numeric_p;
         private System.Windows.Forms.Button but_exportPublic;
+        private System.Windows.Forms.PictureBox pictureBox_formula;
     }
 }
 

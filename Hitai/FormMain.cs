@@ -431,5 +431,18 @@ namespace Hitai
             Clipboard.SetText(Encoding.UTF8.GetString(result));
             MessageBox.Show("Výsledek byl zkopírován do schránky.");
         }
+        #region FormulaHint
+        private void ClearFormulaImage() => pictureBox_formula.Image = null;
+        private void Label_d_MouseHover(object sender, EventArgs e) => pictureBox_formula.Image = Resources.D;
+        private void Label_d_MouseLeave(object sender, EventArgs e) => ClearFormulaImage();
+        private void Label_e_MouseHover(object sender, EventArgs e) => pictureBox_formula.Image = Resources.E;
+        private void Label_e_MouseLeave(object sender, EventArgs e) => ClearFormulaImage();
+        private void Label_n_MouseHover(object sender, EventArgs e) => pictureBox_formula.Image = Resources.N;
+        private void Label_n_MouseLeave(object sender, EventArgs e) => ClearFormulaImage();
+        private void Label_c_MouseHover(object sender, EventArgs e) => pictureBox_formula.Image = Resources.C;
+        private void Label_c_MouseLeave(object sender, EventArgs e) => ClearFormulaImage();
+        private void Label_mback_MouseHover(object sender, EventArgs e) => pictureBox_formula.Image = Resources.M;
+        private void Label_mback_MouseLeave(object sender, EventArgs e) => ClearFormulaImage();
+        #endregion
     }
 }
