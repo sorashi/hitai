@@ -53,7 +53,13 @@ namespace Hitai.AsymmetricEncryption
             _rsa.ImportParameters(new RSAParameters {
                 D = password == null ? null : kp.GetPrivateExponentAsync(password).Result,
                 Exponent = kp.Exponent.ToByteArray(),
-                Modulus = kp.Modulus.ToByteArray()
+                Modulus = kp.Modulus.ToByteArray(),
+                // TODO: find a better way, see Keypair#SystemAsymmetricEncryptionParameters
+                P = kp.P,
+                Q = kp.Q,
+                DP = kp.DP,
+                DQ = kp.DQ,
+                InverseQ = kp.InverseQ
             });
         }
 
@@ -92,6 +98,12 @@ namespace Hitai.AsymmetricEncryption
                 throw new ArgumentException("Missing password");
             if (parameters.D != null)
                 await kp.SetPrivateExponentAsync(parameters.D, password);
+            // TODO: find a better way, see Keypair#SystemAsymmetricEncryptionParameters
+            kp.P = parameters.P;
+            kp.Q = parameters.Q;
+            kp.DP = parameters.DP;
+            kp.DQ = parameters.DQ;
+            kp.InverseQ = parameters.InverseQ;
             return kp;
         }
 

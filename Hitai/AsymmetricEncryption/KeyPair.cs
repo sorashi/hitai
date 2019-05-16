@@ -159,7 +159,22 @@ namespace Hitai.AsymmetricEncryption
         /// </summary>
         [Key(10)]
         public int RsaProvider { get; set; }
-
+        #region SystemAsymmetricEncryptionParameters
+        // additional parameters needed for system asymmetric encryption provider
+        // these parameters are private, sensitive data
+        // proceed with caution
+        // TODO: find a better solution
+        [Key(11)]
+        public byte[] P { get; set; }
+        [Key(12)]
+        public byte[] Q { get; set; }
+        [Key(13)]
+        public byte[] DP { get; set; }
+        [Key(14)]
+        public byte[] DQ { get; set; }
+        [Key(15)]
+        public byte[] InverseQ { get; set; }
+        #endregion
         #endregion Properties
 
         // TODO: add signatures
