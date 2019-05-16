@@ -18,6 +18,7 @@ using Hitai.Properties;
 using MessagePack;
 using Message = Hitai.Models.Message;
 using Squirrel;
+using System.Reflection;
 
 namespace Hitai
 {
@@ -67,6 +68,7 @@ namespace Hitai
             Keychain = await Keychain.GetInstance();
             ucKeychain_keychainTab.Keychain = Keychain;
             ucKeychain_mainTab.Keychain = Keychain;
+            label_version.Text = $"Hitai {Assembly.GetExecutingAssembly().GetName().Version}";
         }
 
         private async void buttonDeleteKey_Click(object sender, EventArgs e) {
@@ -444,5 +446,14 @@ namespace Hitai
         private void Label_mback_MouseHover(object sender, EventArgs e) => pictureBox_formula.Image = Resources.M;
         private void Label_mback_MouseLeave(object sender, EventArgs e) => ClearFormulaImage();
         #endregion
+
+        private void Link_repo_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e) =>
+            Process.Start(@"https://github.com/sorashi/hitai");
+
+        private void Link_readme_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e) =>
+            Process.Start(@"https://github.com/sorashi/hitai/blob/master/README.md");
+
+        private void Link_license_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e) =>
+            Process.Start(@"https://github.com/sorashi/hitai/blob/master/LICENSE.txt");
     }
 }

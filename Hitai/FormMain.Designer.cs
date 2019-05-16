@@ -59,6 +59,13 @@
             this.label1 = new System.Windows.Forms.Label();
             this.numeric_q = new System.Windows.Forms.NumericUpDown();
             this.numeric_p = new System.Windows.Forms.NumericUpDown();
+            this.tabPageAbout = new System.Windows.Forms.TabPage();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.label_version = new System.Windows.Forms.Label();
+            this.link_repo = new System.Windows.Forms.LinkLabel();
+            this.link_license = new System.Windows.Forms.LinkLabel();
+            this.label_appdescription = new System.Windows.Forms.Label();
+            this.link_readme = new System.Windows.Forms.LinkLabel();
             this.tabControl1.SuspendLayout();
             this.tabPageMain.SuspendLayout();
             this.tabPageKeychain.SuspendLayout();
@@ -67,6 +74,8 @@
             ((System.ComponentModel.ISupportInitialize)(this.numeric_m)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numeric_q)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.numeric_p)).BeginInit();
+            this.tabPageAbout.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
             // tabControl1
@@ -74,6 +83,7 @@
             this.tabControl1.Controls.Add(this.tabPageMain);
             this.tabControl1.Controls.Add(this.tabPageKeychain);
             this.tabControl1.Controls.Add(this.tabPageInsight);
+            this.tabControl1.Controls.Add(this.tabPageAbout);
             this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControl1.Location = new System.Drawing.Point(0, 0);
             this.tabControl1.Name = "tabControl1";
@@ -471,6 +481,84 @@
             0});
             this.numeric_p.ValueChanged += new System.EventHandler(this.Numeric_p_ValueChanged);
             // 
+            // tabPageAbout
+            // 
+            this.tabPageAbout.Controls.Add(this.link_readme);
+            this.tabPageAbout.Controls.Add(this.label_appdescription);
+            this.tabPageAbout.Controls.Add(this.link_license);
+            this.tabPageAbout.Controls.Add(this.link_repo);
+            this.tabPageAbout.Controls.Add(this.label_version);
+            this.tabPageAbout.Controls.Add(this.pictureBox1);
+            this.tabPageAbout.Location = new System.Drawing.Point(4, 22);
+            this.tabPageAbout.Name = "tabPageAbout";
+            this.tabPageAbout.Size = new System.Drawing.Size(459, 396);
+            this.tabPageAbout.TabIndex = 3;
+            this.tabPageAbout.Text = "O aplikaci";
+            this.tabPageAbout.UseVisualStyleBackColor = true;
+            // 
+            // pictureBox1
+            // 
+            this.pictureBox1.Image = global::Hitai.Properties.Resources.logo_png;
+            this.pictureBox1.Location = new System.Drawing.Point(3, 3);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(147, 150);
+            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pictureBox1.TabIndex = 0;
+            this.pictureBox1.TabStop = false;
+            // 
+            // label_version
+            // 
+            this.label_version.AutoSize = true;
+            this.label_version.Font = new System.Drawing.Font("Microsoft Sans Serif", 13F);
+            this.label_version.Location = new System.Drawing.Point(161, 3);
+            this.label_version.Name = "label_version";
+            this.label_version.Size = new System.Drawing.Size(133, 22);
+            this.label_version.TabIndex = 1;
+            this.label_version.Text = "Hitai {{version}}";
+            // 
+            // link_repo
+            // 
+            this.link_repo.AutoSize = true;
+            this.link_repo.Location = new System.Drawing.Point(162, 29);
+            this.link_repo.Name = "link_repo";
+            this.link_repo.Size = new System.Drawing.Size(48, 13);
+            this.link_repo.TabIndex = 2;
+            this.link_repo.TabStop = true;
+            this.link_repo.Text = "repozitář";
+            this.link_repo.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.Link_repo_LinkClicked);
+            // 
+            // link_license
+            // 
+            this.link_license.AutoSize = true;
+            this.link_license.Location = new System.Drawing.Point(253, 29);
+            this.link_license.Name = "link_license";
+            this.link_license.Size = new System.Drawing.Size(41, 13);
+            this.link_license.TabIndex = 3;
+            this.link_license.TabStop = true;
+            this.link_license.Text = "licence";
+            this.link_license.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.Link_license_LinkClicked);
+            // 
+            // label_appdescription
+            // 
+            this.label_appdescription.AutoSize = true;
+            this.label_appdescription.Location = new System.Drawing.Point(162, 52);
+            this.label_appdescription.Name = "label_appdescription";
+            this.label_appdescription.Size = new System.Drawing.Size(259, 26);
+            this.label_appdescription.TabIndex = 4;
+            this.label_appdescription.Text = "Aplikace pro klientské asymetrické koncové šifrování\r\ns vlastní implementací RSA\r" +
+    "\n";
+            // 
+            // link_readme
+            // 
+            this.link_readme.AutoSize = true;
+            this.link_readme.Location = new System.Drawing.Point(211, 29);
+            this.link_readme.Name = "link_readme";
+            this.link_readme.Size = new System.Drawing.Size(42, 13);
+            this.link_readme.TabIndex = 5;
+            this.link_readme.TabStop = true;
+            this.link_readme.Text = "readme";
+            this.link_readme.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.Link_readme_LinkClicked);
+            // 
             // FormMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -492,6 +580,9 @@
             ((System.ComponentModel.ISupportInitialize)(this.numeric_m)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numeric_q)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.numeric_p)).EndInit();
+            this.tabPageAbout.ResumeLayout(false);
+            this.tabPageAbout.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -532,6 +623,13 @@
         private System.Windows.Forms.NumericUpDown numeric_p;
         private System.Windows.Forms.Button but_exportPublic;
         private System.Windows.Forms.PictureBox pictureBox_formula;
+        private System.Windows.Forms.TabPage tabPageAbout;
+        private System.Windows.Forms.PictureBox pictureBox1;
+        private System.Windows.Forms.Label label_appdescription;
+        private System.Windows.Forms.LinkLabel link_license;
+        private System.Windows.Forms.LinkLabel link_repo;
+        private System.Windows.Forms.Label label_version;
+        private System.Windows.Forms.LinkLabel link_readme;
     }
 }
 
