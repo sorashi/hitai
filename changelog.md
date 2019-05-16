@@ -5,9 +5,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
 ## [Unreleased]
 ### Added
-- readme
+- custom dialog for reporting an unhandled exception when it occurs
 - insight now shows a formula/hint when hovering over a field label
 - "About" tab
+- readme
 ### Fixed
 - `EnsurePositiveModulus` is now called when generating a new keypair using
 `SystemAsymmetricEncryptionProvider`

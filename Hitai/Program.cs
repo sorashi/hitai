@@ -31,10 +31,8 @@ namespace Hitai
         private static void ShowExceptionDialog(Exception ex) {
             if (ex == null) throw new ArgumentNullException(nameof(ex));
             while (ex is AggregateException) ex = ex.InnerException;
-            // todo vlastní dialog
-            MessageBox.Show(
-                $"V aplikaci nastala chyba, a proto se nyní z této chyby pokusí zotavit. To může mít za následek neočekávané chování.\nZpráva chyby: {ex.Message}\nStack trace: {ex.StackTrace}",
-                "Chyba", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            var erd = new Dialogs.ExceptionReportDialog(ex);
+            erd.ShowDialog();
         }
     }
 }
