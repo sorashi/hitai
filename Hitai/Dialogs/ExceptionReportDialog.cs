@@ -28,7 +28,7 @@ namespace Hitai.Dialogs
 
         private void But_report_Click(object sender, EventArgs e) {
             Process.Start(BuildReportUrl());
-            DialogResult = DialogResult.Cancel;
+            DialogResult = DialogResult.OK;
             this.Close();
         }
 
